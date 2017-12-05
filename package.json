@@ -1,0 +1,26 @@
+{
+  "name": "conductor-spy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VladimirNachev/conductor-spy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VladimirNachev/conductor-spy/issues"
+  },
+  "homepage": "https://github.com/VladimirNachev/conductor-spy#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "dependencies": {
+    "@types/express": "^4.0.39",
+    "express": "^4.16.2"
+  }
+}
