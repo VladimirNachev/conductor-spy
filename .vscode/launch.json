@@ -8,13 +8,13 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/server/index.js"
+            "program": "${workspaceFolder}/server/dist/main/index.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Gulp test",
-            "program": "${workspaceFolder}/server/node_modules/gulp/bin/gulp.js",
+            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
             "args": [
                "test-only"
             ],
@@ -28,7 +28,7 @@
             "type": "node",
             "request": "launch",
             "name": "Gulp build",
-            "program": "${workspaceFolder}/server/node_modules/gulp/bin/gulp.js",
+            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
             "args": [
                "build"
             ],
