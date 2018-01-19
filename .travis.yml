@@ -17,9 +17,9 @@ node_js:
   - "8"
 
 script:
-  - set -e
-  - npm run db:test:migrate
   - npm run server:lint
   - set -e
   - npm run server:build
+  - set -e
+  - npm run db:test:migrate
   - npm run server:test
