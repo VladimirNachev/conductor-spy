@@ -9,7 +9,7 @@
     "server:lint:fix": "./node_modules/.bin/tslint -p ./server --fix",
     "server:watch": "tsc -p ./server --watch",
     "server:build": "tsc -p ./server",
-    "server:test": "cross-env NODE_ENV=test ./node_modules/.bin/jasmine --config='./server/jasmine.json'",
+    "server:test": "./node_modules/.bin/jasmine --config=./server/jasmine.json",
     "db:dev:migrate": "./node_modules/.bin/sequelize db:migrate --env development",
     "db:dev:migrate:undo:all": "./node_modules/.bin/sequelize db:migrate:undo:all --env development",
     "db:dev:remigrate": "npm run db:dev:migrate:undo:all && npm run db:dev:migrate",
