@@ -4,7 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "server:start": "node ./server/dist/main",
+    "server:lint": "./node_modules/.bin/tslint -p ./server",
+    "server:lint:fix": "./node_modules/.bin/tslint -p ./server --fix",
+    "server:watch": "tsc -p ./server --watch",
+    "server:build": "tsc -p ./server",
+    "server:test": "cross-env NODE_ENV=test ./node_modules/.bin/jasmine --config='./server/jasmine.json'",
+    "db:dev:migrate": "./node_modules/.bin/sequelize db:migrate --env development",
+    "db:dev:migrate:undo:all": "./node_modules/.bin/sequelize db:migrate:undo:all --env development",
+    "db:dev:remigrate": "npm run db:dev:migrate:undo:all && npm run db:dev:migrate",
+    "db:test:migrate": "./node_modules/.bin/sequelize db:migrate --env test",
+    "db:test:migrate:undo:all": "./node_modules/.bin/sequelize db:migrate:undo:all --env test",
+    "db:test:remigrate": "npm run db:test:migrate:undo:all && npm run db:test:migrate"
   },
   "repository": {
     "type": "git",
@@ -17,13 +28,19 @@
   },
   "homepage": "https://github.com/VladimirNachev/conductor-spy#readme",
   "devDependencies": {
+    "@types/jasmine": "^2.8.4",
     "gulp": "^3.9.1",
-    "pg": "^7.4.0",
-    "sequelize": "^4.28.6",
-    "sequelize-cli": "^3.2.0"
+    "jasmine": "^2.8.0",
+    "pg": "^7.4.1",
+    "sequelize-cli": "^3.2.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.6.2"
   },
   "dependencies": {
+    "@types/debug": "0.0.30",
     "@types/express": "^4.0.39",
-    "express": "^4.16.2"
+    "@types/sequelize": "^4.27.3",
+    "express": "^4.16.2",
+    "sequelize": "^4.31.2"
   }
 }
