@@ -6,20 +6,21 @@ env:
 
 install:
   - npm install
+  - npm uninstall -g typescript # We should rely only on the locally installed typescript
 
 before_script:
   - psql -c "CREATE DATABASE \"conductors-spy-test\";" -U postgres
+  - psql -c "CREATE DATABASE \"conductors-spy-development\";" -U postgres
   - psql -c "ALTER USER postgres WITH PASSWORD 'mysecretpassword';" -U postgres
 
 language: node_js
 node_js:
   - "7"
   - "8"
+  - "9"
 
 script:
   - npm run server:lint
   - set -e
-  - npm run server:build
-  - set -e
-  - npm run db:test:migrate
+  - npm run server:init
   - npm run server:test
