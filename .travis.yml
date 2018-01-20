@@ -20,5 +20,5 @@ node_js:
 script:
   - npm run server:lint
   - set -e
-  - npm run server:init
+  - npm run init
   - npm run server:test
