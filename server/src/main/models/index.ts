@@ -29,7 +29,7 @@ function connect(): sequelize.Sequelize {
    const env: string = process.env.NODE_ENV || "development";
    Log.DB("Environment: " + env);
 
-   const configPath: string = path.resolve(__dirname, "../../../config/sequelize.js");
+   const configPath: string = path.resolve(__dirname, "../../../config/dbconfig.js");
    const config: any = require(configPath)[env];
    const databaseUri: string = config.use_env_variable
       ? (process.env[config.use_env_variable] || "")
