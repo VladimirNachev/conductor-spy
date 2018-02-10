@@ -25,4 +25,5 @@
       ".sequelizerc": "javascript",
    },
    "editor.detectIndentation": false,
+   "files.insertFinalNewline": true,
 }
