@@ -1,13 +1,45 @@
 import { DataTypes, Sequelize } from "sequelize";
 import * as sequelize from "sequelize";
-import { StandardAttributes, StandardInstance } from "../model";
+import { ModelContainer, StandardAttributes, StandardInstance } from "../model";
 
-export type StationAttributes = StandardAttributes;
-export type StationInstance = StandardInstance<StationAttributes>;
+export interface StationAttributes extends StandardAttributes {
+  name?: string,
+  latitude?: number,
+  longtitude?: number,
+  conductorAt?: boolean,
+};
+
+export interface StationInstance extends StandardInstance<StationAttributes> {
+  name: string,
+  latitude: number,
+  longtitude: number,
+  conductorAt: boolean,
+}
 
 export type StationModel = sequelize.Model<StationInstance, StationAttributes>;
 
 export default function (database: Sequelize, types: DataTypes): StationModel {
-   const station: StationModel = database.define("Station", {});
+   const station: StationModel = database.define("Station", {
+     name: {
+       allowNull: false,
+       type: types.STRING,
+     },
+
+     latitude: {
+       allowNull: false,
+       type: types.DOUBLE,
+     },
+
+     longtitude: {
+       allowNull: false,
+       type: types.DOUBLE,
+     },
+
+     conductorAt: {
+       allowNull: false,
+       type: types.BOOLEAN,
+     },
+   });
+
    return station;
 }

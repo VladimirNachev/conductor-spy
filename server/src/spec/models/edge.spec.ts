@@ -13,8 +13,15 @@ interface SS {
 
 describe("The Edge model", (): void => {
    beforeEach(function (this: SS, done: DoneFn): void {
+      const stationAttributes = {
+         name: "Detski Iasli",
+         latitude: 1.23,
+         longtitude: 2.34,
+         conductorAt: true,
+      };
+
       Station.bulkCreate(
-         [{}, {}],
+         [stationAttributes, stationAttributes],
          { returning: true },
       ).then((stations: StationInstance[]): void => {
          [this.station, this.station2] = [stations[0], stations[1]];
