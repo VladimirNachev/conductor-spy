@@ -8,12 +8,18 @@ export = new NewTableMigration("Edges", (types: DataTypes): DefineAttributes => 
    },
    fromStationId: {
       allowNull: false,
-      references: { model: "Stations" },
+      references: {
+         model: "Stations",
+         key: "id",
+      },
       type: types.INTEGER,
    },
    toStationId: {
       allowNull: false,
-      references: { model: "Stations" },
+      references: {
+         model: "Stations",
+         key: "id",
+      },
       type: types.INTEGER,
    },
    travelTimeMs: {

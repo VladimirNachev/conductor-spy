@@ -3,40 +3,17 @@ import { Edge, Station } from "../../main/models";
 import { EdgeAttributes, EdgeInstance } from "../../main/models/edge";
 import { StationAttributes, StationInstance } from "../../main/models/station";
 import { SpecUtil } from "../SpecUtil";
-
-interface SS {
-   station: StationInstance;
-   station2: StationInstance;
-}
+import { Testbed } from "../Testbed";
 
 describe("The Edge model", (): void => {
-   beforeEach(function (this: SS, done: DoneFn): void {
-      const stationAttributes: StationAttributes = {
-         name: "Detski Iasli",
-         latitude: 1.23,
-         longtitude: 2.34,
-         conductorAt: 12,
-      };
-
-      Station.bulkCreate(
-         [stationAttributes, stationAttributes],
-         { returning: true },
-      ).then((stations: StationInstance[]): void => {
-         [this.station, this.station2] = [stations[0], stations[1]];
-         expect(this.station.id).toBeTruthy();
-         expect(this.station2.id).toBeTruthy();
-      }).then(done).catch(done.fail);
-   });
-
-   it("can be created and destroyed", function (this: SS, done: DoneFn): void {
-      const edgeAttributes: EdgeAttributes = {
-         chance: 0.4,
-         fromStationId: this.station.id,
-         toStationId: this.station2.id,
-         travelTimeMs: 12052,
-      };
-
+   it("can be created and destroyed", (done: DoneFn): void => {
       let edge: EdgeInstance;
+      const edgeAttributes: EdgeAttributes = {
+         travelTimeMs: 1800,
+         fromStationId: Testbed.stations[0].id,
+         toStationId: Testbed.stations[1].id,
+         chance: 0.5,
+      };
 
       Edge.create(edgeAttributes).then((result: EdgeInstance): Promise<void> => {
          expect(result).toBeTruthy();
@@ -44,13 +21,9 @@ describe("The Edge model", (): void => {
          edge = result;
          return result.destroy();
       }).then((): Promise<EdgeInstance> => {
-         return Edge.findById((edge as any).id);
+         return Edge.findById(edge.id);
       }).then((result: EdgeInstance): void => {
          expect(result).toBeFalsy();
       }).then(done).catch(done.fail);
-   });
-
-   afterEach(function (this: SS, done: DoneFn): void {
-      SpecUtil.destroy(this.station, this.station2).then(done).catch(done.fail);
    });
 });
