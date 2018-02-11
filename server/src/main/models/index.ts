@@ -4,6 +4,7 @@ import * as sequelize from "sequelize";
 import { Log } from "../Log";
 import { ModelContainer } from "../model";
 import { EdgeModel } from "./edge";
+import { RouteModel } from "./route";
 import { StationModel } from "./station";
 
 Log.DB("Initializing...");
@@ -14,9 +15,11 @@ const database: sequelize.Sequelize = connect();
 const models: ModelContainer = {
    Edge: getModel("edge"),
    Station: getModel("station"),
+   Route: getModel("route"),
 };
 export const Station: StationModel = models.Station;
 export const Edge: EdgeModel = models.Edge;
+export const Route: RouteModel = models.Route;
 
 // Helper functions
 const abstractModels: { [modelName: string]: any } = models;
