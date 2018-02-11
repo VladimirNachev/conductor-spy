@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 app.get("/", (req: express.Request, res: express.Response): void => {
    Log.APP("Request has come from IP " + req.ip);
-   Station.create({name: "Detski Iasli", latitude: 1.23, longtitude: 2.34, conductorAt: true});
+   Station.create({name: "Detski Iasli", latitude: 1.23, longtitude: 2.34, conductorAt: 12});
 
    Station.count().then((count: number): void => {
       res.status(200).send("Hello world. There are " + count + " stations.");

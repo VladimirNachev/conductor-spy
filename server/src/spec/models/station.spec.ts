@@ -9,7 +9,7 @@ describe("The Station model", (): void => {
          name: "name",
          latitude: 1.2,
          longtitude: 5.6,
-         conductorAt: true,
+         conductorAt: 12,
       };
       let station: StationInstance;
 

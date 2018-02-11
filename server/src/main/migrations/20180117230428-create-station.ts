@@ -19,6 +19,6 @@ export = new NewTableMigration("Stations", (types: DataTypes): DefineAttributes 
 
    conductorAt: {
      allowNull: false,
-     type: types.BOOLEAN,
+     type: types.INTEGER,
    },
 }));

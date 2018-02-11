@@ -17,7 +17,7 @@ describe("The Edge model", (): void => {
          name: "Detski Iasli",
          latitude: 1.23,
          longtitude: 2.34,
-         conductorAt: true,
+         conductorAt: 12,
       };
 
       Station.bulkCreate(
