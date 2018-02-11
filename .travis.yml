@@ -21,4 +21,4 @@ script:
   - npm run server:lint
   - set -e
   - npm run init
-  - npm run server:test
+  - npm run server:test-only

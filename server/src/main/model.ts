@@ -12,6 +12,7 @@ import { Instance } from "sequelize";
 export interface ModelContainer {
    Station: AnyModel;
    Edge: AnyModel;
+   Route: AnyModel;
 }
 
 type AnyModel = sequelize.Model<any, any>;

@@ -11,6 +11,7 @@ describe("The Station model", (): void => {
          longtitude: 5.6,
          conductorAt: 12,
       };
+
       let station: StationInstance;
 
       Station.create(stationAttributes).then((result: StationInstance): Promise<void> => {
