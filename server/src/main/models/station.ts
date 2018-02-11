@@ -3,17 +3,17 @@ import * as sequelize from "sequelize";
 import { ModelContainer, StandardAttributes, StandardInstance } from "../model";
 
 export interface StationAttributes extends StandardAttributes {
-  name?: string,
-  latitude?: number,
-  longtitude?: number,
-  conductorAt?: number,
-};
+  name?: string;
+  latitude?: number;
+  longtitude?: number;
+  conductorAt?: number;
+}
 
 export interface StationInstance extends StandardInstance<StationAttributes> {
-  name: string,
-  latitude: number,
-  longtitude: number,
-  conductorAt: number,
+  name: string;
+  latitude: number;
+  longtitude: number;
+  conductorAt: number;
 }
 
 export type StationModel = sequelize.Model<StationInstance, StationAttributes>;

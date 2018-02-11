@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import { Edge, Station } from "../../main/models";
 import { EdgeAttributes, EdgeInstance } from "../../main/models/edge";
-import { StationInstance } from "../../main/models/station";
+import { StationAttributes, StationInstance } from "../../main/models/station";
 import { SpecUtil } from "../SpecUtil";
 
 interface SS {
@@ -13,7 +13,7 @@ interface SS {
 
 describe("The Edge model", (): void => {
    beforeEach(function (this: SS, done: DoneFn): void {
-      const stationAttributes = {
+      const stationAttributes: StationAttributes = {
          name: "Detski Iasli",
          latitude: 1.23,
          longtitude: 2.34,

@@ -4,7 +4,7 @@ import { StationAttributes, StationInstance } from "../../main/models/station";
 import { SpecUtil } from "../SpecUtil";
 
 describe("The Station model", (): void => {
-   it("can be created and destroyed", function (done: DoneFn): void {
+   it("can be created and destroyed", (done: DoneFn): void => {
       const stationAttributes: StationAttributes = {
          name: "name",
          latitude: 1.2,
