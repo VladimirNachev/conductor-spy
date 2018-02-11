@@ -1,26 +1,26 @@
 import { Op } from "sequelize";
-import { Station } from "../../main/models";
+import { Log } from "../../main/Log";
+import { Edge, Station } from "../../main/models";
+import { EdgeAttributes, EdgeInstance } from "../../main/models/edge";
 import { StationAttributes, StationInstance } from "../../main/models/station";
 import { SpecUtil } from "../SpecUtil";
+import { Testbed } from "../Testbed";
 
 describe("The Station model", (): void => {
    it("can be created and destroyed", (done: DoneFn): void => {
+      let station: StationInstance;
       const stationAttributes: StationAttributes = {
-         name: "name",
-         latitude: 1.2,
-         longtitude: 5.6,
-         conductorAt: 12,
+         name: "asd",
+         conductorAt: 1800,
+         longtitude: 5.235,
+         latitude: 12.12,
       };
 
-      let station: StationInstance;
-
       Station.create(stationAttributes).then((result: StationInstance): Promise<void> => {
-         expect(result).toBeTruthy();
-         SpecUtil.verifyInstance(result, stationAttributes);
          station = result;
          return result.destroy();
       }).then((): Promise<StationInstance> => {
-         return Station.findById((station as any).id);
+         return Station.findById(station.id);
       }).then((result: StationInstance): void => {
          expect(result).toBeFalsy();
       }).then(done).catch(done.fail);
