@@ -22,9 +22,6 @@ export interface EdgeInstance extends StandardInstance<EdgeAttributes> {
    chance: number;
    /** The milliseconds it takes a conductor to move from station A to station B */
    travelTimeMs: number;
-
-   getFromStation(): any;
-   getToStation(): any;
 }
 
 export type EdgeModel = sequelize.Model<EdgeInstance, EdgeAttributes>;
@@ -42,14 +39,8 @@ export default function (database: Sequelize, types: DataTypes): EdgeModel {
    });
 
    (edge as any).associate = (models: ModelContainer): void => {
-      edge.belongsTo(models.Station, {
-         foreignKey: "fromStationId",
-         as: "fromStation",
-      });
-      edge.belongsTo(models.Station, {
-         foreignKey: "toStationId",
-         as: "toStation",
-      });
+      edge.belongsTo(models.Station, { foreignKey: "fromStationId" });
+      edge.belongsTo(models.Station, { foreignKey: "toStationId" });
    };
 
    return edge;

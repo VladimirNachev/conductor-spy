@@ -3,22 +3,22 @@ import { NewTableMigration } from "../NewTableMigration";
 
 export = new NewTableMigration("Stations", (types: DataTypes): DefineAttributes => ({
    name: {
-      allowNull: false,
-      type: types.STRING,
+     allowNull: false,
+     type: types.STRING,
    },
 
    latitude: {
-      allowNull: false,
-      type: types.DOUBLE,
+     allowNull: false,
+     type: types.DOUBLE,
    },
 
    longtitude: {
-      allowNull: false,
-      type: types.DOUBLE,
+     allowNull: false,
+     type: types.DOUBLE,
    },
 
    conductorAt: {
-      allowNull: false,
-      type: types.INTEGER,
+     allowNull: false,
+     type: types.INTEGER,
    },
 }));
