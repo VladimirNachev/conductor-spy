@@ -5,12 +5,11 @@ import { SpecUtil } from "../SpecUtil";
 
 describe("The Route model", (): void => {
    it("can be created and destroyed", (done: DoneFn): void => {
+      let route: RouteInstance;
       const routeAttributes: RouteAttributes = {
          routeNumber: 1,
          vehicleType: "bus",
       };
-
-      let route: RouteInstance;
 
       Route.create(routeAttributes).then((result: RouteInstance): Promise<void> => {
          expect(result).toBeTruthy();
@@ -18,7 +17,7 @@ describe("The Route model", (): void => {
          route = result;
          return result.destroy();
       }).then((): Promise<RouteInstance> => {
-         return Route.findById((route as any).id);
+         return Route.findById(route.id);
       }).then((result: RouteInstance): void => {
          expect(result).toBeFalsy();
       }).then(done).catch(done.fail);
