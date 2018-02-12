@@ -14,6 +14,7 @@ beforeEach((done: DoneFn): void => {
       expect(Testbed.routes.length).toBe(1);
       return Promise.all([
          Testbed.createEdge(Testbed.stations[0], Testbed.stations[1]),
+         Testbed.createRoutePoint(Testbed.routes[0], Testbed.stations[0]),
       ]);
    }).then(done).catch(done.fail);
 });

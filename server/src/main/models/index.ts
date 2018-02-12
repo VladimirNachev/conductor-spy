@@ -5,6 +5,7 @@ import { Log } from "../Log";
 import { ModelContainer } from "../model";
 import { EdgeModel } from "./edge";
 import { RouteModel } from "./route";
+import { RoutePointModel } from "./route-point";
 import { StationModel } from "./station";
 
 Log.DB("Initializing...");
@@ -16,10 +17,12 @@ const models: ModelContainer = {
    Edge: getModel("edge"),
    Station: getModel("station"),
    Route: getModel("route"),
+   RoutePoint: getModel("route-point"),
 };
 export const Station: StationModel = models.Station;
 export const Edge: EdgeModel = models.Edge;
 export const Route: RouteModel = models.Route;
+export const RoutePoint: RoutePointModel = models.RoutePoint;
 
 // Helper functions
 const abstractModels: { [modelName: string]: any } = models;

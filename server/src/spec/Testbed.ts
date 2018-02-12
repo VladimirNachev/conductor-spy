@@ -1,15 +1,17 @@
 import { Promise } from "bluebird";
 import { Model } from "sequelize";
 import { AnyInstance } from "../main/model";
-import { Edge, Route, Station } from "../main/models";
+import { Edge, Route, RoutePoint, Station } from "../main/models";
 import { EdgeInstance } from "../main/models/edge";
 import { RouteInstance } from "../main/models/route";
+import { RoutePointInstance } from "../main/models/route-point";
 import { StationInstance } from "../main/models/station";
 
 export class Testbed {
    public static routes: RouteInstance[] = [];
    public static edges: EdgeInstance[] = [];
    public static stations: StationInstance[] = [];
+   public static routePoints: RoutePointInstance[] = [];
 
    public static createRoute(): Promise<RouteInstance> {
       return Route.create({
@@ -43,6 +45,18 @@ export class Testbed {
          name: "some-station",
       }).then((result: StationInstance): StationInstance => {
          Testbed.stations.push(result);
+         return result;
+      });
+   }
+
+   public static createRoutePoint(route: RouteInstance, station: StationInstance): Promise<RoutePointInstance> {
+      return RoutePoint.create({
+         index: 2,
+         isReversed: false,
+         routeId: route.id,
+         stationId: station.id,
+      }).then((result: RoutePointInstance): RoutePointInstance => {
+         Testbed.routePoints.push(result);
          return result;
       });
    }
