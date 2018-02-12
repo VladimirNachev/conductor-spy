@@ -14,6 +14,7 @@ export interface StationInstance extends StandardInstance<StationAttributes> {
    latitude: number;
    longtitude: number;
    conductorAt: number;
+
 }
 
 export type StationModel = sequelize.Model<StationInstance, StationAttributes>;
@@ -42,6 +43,11 @@ export default function (database: Sequelize, types: DataTypes): StationModel {
    });
 
    (station as any).associate = (models: ModelContainer): void => {
+      station.hasMany(models.RoutePoint, {
+         foreignKey: "stationId",
+         onDelete: "cascade",
+         hooks: true,
+      });
       station.hasMany(models.Edge, {
          foreignKey: "fromStationId",
          onDelete: "cascade",

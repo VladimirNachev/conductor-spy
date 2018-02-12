@@ -27,5 +27,13 @@ export default function (database: Sequelize, types: DataTypes): RouteModel {
       },
    });
 
+   (route as any).associate = (models: ModelContainer): void => {
+      route.hasMany(models.RoutePoint, {
+         foreignKey: "routeId",
+         onDelete: "cascade",
+         hooks: true,
+      });
+   };
+
    return route;
 }

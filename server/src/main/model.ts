@@ -13,6 +13,7 @@ export interface ModelContainer {
    Station: AnyModel;
    Edge: AnyModel;
    Route: AnyModel;
+   RoutePoint: AnyModel;
 }
 
 type AnyModel = sequelize.Model<any, any>;
