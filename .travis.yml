@@ -13,7 +13,6 @@ before_script:
 
 language: node_js
 node_js:
-  - "7"
   - "8"
   - "9"
 
@@ -21,4 +20,6 @@ script:
   - npm run server:lint
   - set -e
   - npm run init
+  - npm run db:dev:seed
+  - npm run db:dev:seed:undo
   - npm run server:test-only
