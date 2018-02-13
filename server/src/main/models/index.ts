@@ -41,7 +41,7 @@ function connect(): sequelize.Sequelize {
       ? (process.env[config.use_env_variable] || "")
       : "";
 
-   Log.DB("Sequelize with database: " + databaseUri || config.database);
+   Log.DB("Sequelize with database: " + (databaseUri || config.database));
 
    return databaseUri
       ? new sequelize(databaseUri, config)
