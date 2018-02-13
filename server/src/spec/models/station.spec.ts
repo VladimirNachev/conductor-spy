@@ -9,14 +9,8 @@ import { Testbed } from "../Testbed";
 describe("The Station model", (): void => {
    it("can be created and destroyed", (done: DoneFn): void => {
       let station: StationInstance;
-      const stationAttributes: StationAttributes = {
-         name: "asd",
-         conductorAt: 1800,
-         longtitude: 5.235,
-         latitude: 12.12,
-      };
 
-      Station.create(stationAttributes).then((result: StationInstance): Promise<void> => {
+      Testbed.createStation().then((result: StationInstance): Promise<void> => {
          station = result;
          return result.destroy();
       }).then((): Promise<StationInstance> => {
@@ -24,5 +18,13 @@ describe("The Station model", (): void => {
       }).then((result: StationInstance): void => {
          expect(result).toBeFalsy();
       }).then(done).catch(done.fail);
+   });
+
+   it("does not allow duplicate station numbers", (done: DoneFn): void => {
+      Testbed.createStation().then((result: StationInstance): Promise<StationInstance> => {
+         return Testbed.createStation({ stationNumber: result.stationNumber });
+      }).then((): void => {
+         done.fail("The creation of the station with the same number should have failed");
+      }).catch(done);
    });
 });

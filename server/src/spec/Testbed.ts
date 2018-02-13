@@ -1,11 +1,12 @@
 import { Promise } from "bluebird";
+import * as _ from "lodash";
 import { Model } from "sequelize";
 import { AnyInstance } from "../main/model";
 import { Edge, Route, RoutePoint, Station } from "../main/models";
 import { EdgeInstance } from "../main/models/edge";
 import { RouteInstance } from "../main/models/route";
 import { RoutePointInstance } from "../main/models/route-point";
-import { StationInstance } from "../main/models/station";
+import { StationAttributes, StationInstance } from "../main/models/station";
 
 export class Testbed {
    public static routes: RouteInstance[] = [];
@@ -37,13 +38,17 @@ export class Testbed {
       });
    }
 
-   public static createStation(): Promise<StationInstance> {
-      return Station.create({
+   public static createStation(attributes?: StationAttributes): Promise<StationInstance> {
+      const defaultAttributes: StationAttributes = {
+         name: "some-station",
+         stationNumber: "0" + Math.floor(Math.random() * 1000000).toString(),
          latitude: 1.12,
          longtitude: 1.52,
          conductorAt: 1285182,
-         name: "some-station",
-      }).then((result: StationInstance): StationInstance => {
+      };
+      attributes = _.defaults(attributes || {}, defaultAttributes);
+
+      return Station.create(attributes).then((result: StationInstance): StationInstance => {
          Testbed.stations.push(result);
          return result;
       });
