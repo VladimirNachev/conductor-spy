@@ -5,12 +5,13 @@ import { StandardAttributes, StandardInstance } from "./model";
 export class PopulateTableSeeder<TAttributes extends StandardAttributes> {
 
    /**
-    * A class used for easy creation of migrations that create new tables.
-    * It already contains the ID, createdAt and updatedAt fields.
-    * It also contains the definitions of the `up` and `down` method
+    * A class used for easy creation of seeders that populate tables.
+    * The attributes will have the createdAt and updatedAt fields added to them.
+    * It also contains the definitions of the `up` and `down` method.
     *
-    * @param tableName The name of the table to be created
-    * @param attributeInitializer A callback that returns the definitions of the table fields
+    * WARNING: The table is cleared in the 'up' method and in the 'down' method!
+    *
+    * @param tableName The name of the table to be populated
     */
    constructor(
       private readonly tableName: string,
@@ -46,7 +47,6 @@ export class PopulateTableSeeder<TAttributes extends StandardAttributes> {
     * Empty the table
     *
     * @param queryInterface The interface to the database
-    * @param sequelize The database connection
     */
    public down(queryInterface: QueryInterface): Promise<void> {
       return this.clearTable(queryInterface);
