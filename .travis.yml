@@ -1,9 +1,6 @@
 services:
   - postgresql
 
-env:
-  - NODE_ENV=test
-
 install:
   - npm install
   - npm uninstall -g typescript # We should rely only on the locally installed typescript
