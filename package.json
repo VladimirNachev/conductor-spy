@@ -19,6 +19,8 @@
     "db:dev:migrate": "./node_modules/.bin/sequelize db:migrate --env development",
     "db:dev:migrate:undo:all": "./node_modules/.bin/sequelize db:migrate:undo:all --env development",
     "db:dev:remigrate": "npm run db:dev:migrate:undo:all && npm run db:dev:migrate",
+    "db:dev:seed": "./node_modules/.bin/sequelize db:seed:all --env development",
+    "db:dev:seed:undo": "./node_modules/.bin/sequelize db:seed:undo:all --env development",
     "db:test:init": "npm run db:test:create && npm run db:test:migrate",
     "db:test:create": "./node_modules/.bin/sequelize db:create --env test || true",
     "db:test:migrate": "./node_modules/.bin/sequelize db:migrate --env test",

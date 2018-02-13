@@ -24,6 +24,10 @@ type AnyModel = sequelize.Model<any, any>;
 export interface StandardAttributes {
    /** The ID of the instance */
    id?: number;
+   /** When the instance was created */
+   createdAt?: Date;
+   /** When the instance was last updated */
+   updatedAt?: Date;
 }
 
 /**
