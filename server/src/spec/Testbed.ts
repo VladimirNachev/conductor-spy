@@ -3,9 +3,9 @@ import * as _ from "lodash";
 import { Model } from "sequelize";
 import { AnyInstance, StandardAttributes } from "../main/model";
 import { Edge, Route, RoutePoint, Station } from "../main/models";
-import { EdgeInstance, EdgeAttributes } from "../main/models/edge";
-import { RouteInstance, RouteAttributes } from "../main/models/route";
-import { RoutePointInstance, RoutePointAttributes } from "../main/models/route-point";
+import { EdgeAttributes, EdgeInstance } from "../main/models/edge";
+import { RouteAttributes, RouteInstance } from "../main/models/route";
+import { RoutePointAttributes, RoutePointInstance } from "../main/models/route-point";
 import { StationAttributes, StationInstance } from "../main/models/station";
 
 export class Testbed {
