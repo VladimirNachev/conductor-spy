@@ -1,11 +1,11 @@
 import { Promise } from "bluebird";
 import * as _ from "lodash";
 import { Model } from "sequelize";
-import { AnyInstance } from "../main/model";
+import { AnyInstance, StandardAttributes } from "../main/model";
 import { Edge, Route, RoutePoint, Station } from "../main/models";
-import { EdgeInstance } from "../main/models/edge";
-import { RouteInstance } from "../main/models/route";
-import { RoutePointInstance } from "../main/models/route-point";
+import { EdgeInstance, EdgeAttributes } from "../main/models/edge";
+import { RouteInstance, RouteAttributes } from "../main/models/route";
+import { RoutePointInstance, RoutePointAttributes } from "../main/models/route-point";
 import { StationAttributes, StationInstance } from "../main/models/station";
 
 export class Testbed {
@@ -14,25 +14,35 @@ export class Testbed {
    public static stations: StationInstance[] = [];
    public static routePoints: RoutePointInstance[] = [];
 
-   public static createRoute(): Promise<RouteInstance> {
-      return Route.create({
+   public static lastAttributes: StandardAttributes;
+
+   public static createRoute(attributes?: RouteAttributes): Promise<RouteInstance> {
+      const defaultAttributes: RouteAttributes = {
          routeNumber: 5,
          vehicleType: "bus",
-      }).then((result: RouteInstance): RouteInstance => {
+      };
+      attributes = _.defaults(attributes || {}, defaultAttributes);
+      Testbed.lastAttributes = attributes;
+
+      return Route.create(attributes).then((result: RouteInstance): RouteInstance => {
          Testbed.routes.push(result);
          return result;
       });
    }
 
    public static createEdge(station1: StationInstance,
-      station2: StationInstance): Promise<EdgeInstance> {
+      station2: StationInstance, attributes?: EdgeAttributes): Promise<EdgeInstance> {
 
-      return Edge.create({
+      const defaultAttributes: EdgeAttributes = {
          chance: 0.5,
-         fromStationId: station1.id,
-         toStationId: station2.id,
+         fromStationId: station1 ? station1.id : undefined,
+         toStationId: station2 ? station2.id : undefined,
          travelTimeMs: 1800,
-      }).then((result: EdgeInstance): EdgeInstance => {
+      };
+      attributes = _.defaults(attributes || {}, defaultAttributes);
+      Testbed.lastAttributes = attributes;
+
+      return Edge.create(attributes).then((result: EdgeInstance): EdgeInstance => {
          Testbed.edges.push(result);
          return result;
       });
@@ -47,6 +57,7 @@ export class Testbed {
          conductorAt: 1285182,
       };
       attributes = _.defaults(attributes || {}, defaultAttributes);
+      Testbed.lastAttributes = attributes;
 
       return Station.create(attributes).then((result: StationInstance): StationInstance => {
          Testbed.stations.push(result);
@@ -54,13 +65,19 @@ export class Testbed {
       });
    }
 
-   public static createRoutePoint(route: RouteInstance, station: StationInstance): Promise<RoutePointInstance> {
-      return RoutePoint.create({
+   public static createRoutePoint(route: RouteInstance, station: StationInstance,
+      attributes?: RoutePointAttributes): Promise<RoutePointInstance> {
+
+      const defaultAttributes: RoutePointAttributes = {
          index: 2,
-         isReversed: false,
+         subrouteIndex: 12,
          routeId: route.id,
          stationId: station.id,
-      }).then((result: RoutePointInstance): RoutePointInstance => {
+      };
+      attributes = _.defaults(attributes || {}, defaultAttributes);
+      Testbed.lastAttributes = attributes;
+
+      return RoutePoint.create(attributes).then((result: RoutePointInstance): RoutePointInstance => {
          Testbed.routePoints.push(result);
          return result;
       });

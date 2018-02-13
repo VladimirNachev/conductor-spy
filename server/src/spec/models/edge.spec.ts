@@ -8,16 +8,11 @@ import { Testbed } from "../Testbed";
 describe("The Edge model", (): void => {
    it("can be created and destroyed", (done: DoneFn): void => {
       let edge: EdgeInstance;
-      const edgeAttributes: EdgeAttributes = {
-         travelTimeMs: 1800,
-         fromStationId: Testbed.stations[0].id,
-         toStationId: Testbed.stations[1].id,
-         chance: 0.5,
-      };
 
-      Edge.create(edgeAttributes).then((result: EdgeInstance): Promise<void> => {
-         expect(result).toBeTruthy();
-         SpecUtil.verifyInstance(result, edgeAttributes);
+      Testbed.createEdge(Testbed.stations[0],
+         Testbed.stations[1],
+      ).then((result: EdgeInstance): Promise<void> => {
+         SpecUtil.verifyInstance(result, Testbed.lastAttributes);
          edge = result;
          return result.destroy();
       }).then((): Promise<EdgeInstance> => {

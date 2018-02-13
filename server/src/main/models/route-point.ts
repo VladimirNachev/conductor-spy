@@ -4,14 +4,14 @@ import { ModelContainer, StandardAttributes, StandardInstance } from "../model";
 
 export interface RoutePointAttributes extends StandardAttributes {
    index?: number;
-   isReversed?: boolean;
+   subrouteIndex?: number;
    routeId?: number;
    stationId?: number;
 }
 
 export interface RoutePointInstance extends StandardInstance<RoutePointAttributes> {
    index: number;
-   isReversed: boolean;
+   subrouteIndex: number;
    routeId: number;
    stationId: number;
 
@@ -28,9 +28,9 @@ export default function (database: Sequelize, types: DataTypes): RoutePointModel
          type: types.INTEGER,
       },
 
-      isReversed: {
+      subrouteIndex: {
          allowNull: false,
-         type: types.BOOLEAN,
+         type: types.INTEGER,
       },
    });
 
