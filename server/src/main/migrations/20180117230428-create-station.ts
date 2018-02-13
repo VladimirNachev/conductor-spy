@@ -7,6 +7,12 @@ export = new NewTableMigration("Stations", (types: DataTypes): DefineAttributes 
       type: types.STRING,
    },
 
+   stationNumber: {
+      allowNull: false,
+      unique: true,
+      type: types.STRING,
+   },
+
    latitude: {
       allowNull: false,
       type: types.DOUBLE,

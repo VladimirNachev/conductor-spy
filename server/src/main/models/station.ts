@@ -4,6 +4,7 @@ import { ModelContainer, StandardAttributes, StandardInstance } from "../model";
 
 export interface StationAttributes extends StandardAttributes {
    name?: string;
+   stationNumber?: string;
    latitude?: number;
    longtitude?: number;
    conductorAt?: number;
@@ -11,6 +12,7 @@ export interface StationAttributes extends StandardAttributes {
 
 export interface StationInstance extends StandardInstance<StationAttributes> {
    name: string;
+   stationNumber: string;
    latitude: number;
    longtitude: number;
    conductorAt: number;
@@ -23,6 +25,12 @@ export default function (database: Sequelize, types: DataTypes): StationModel {
    const station: StationModel = database.define("Station", {
       name: {
          allowNull: false,
+         type: types.STRING,
+      },
+
+      stationNumber: {
+         allowNull: false,
+         unique: true,
          type: types.STRING,
       },
 
