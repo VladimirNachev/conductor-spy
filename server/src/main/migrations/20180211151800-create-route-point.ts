@@ -7,9 +7,9 @@ export = new NewTableMigration("RoutePoints", (types: DataTypes): DefineAttribut
       type: types.INTEGER,
    },
 
-   isReversed: {
+   subrouteIndex: {
       allowNull: false,
-      type: types.BOOLEAN,
+      type: types.INTEGER,
    },
 
    routeId: {

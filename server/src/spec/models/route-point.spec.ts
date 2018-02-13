@@ -10,18 +10,12 @@ import { Testbed } from "../Testbed";
 describe("The RoutePoint model", (): void => {
    it("can be created and destroyed", (done: DoneFn): void => {
       let routePoint: RoutePointInstance;
-      const routePointAttributes: RoutePointAttributes = {
-         index: 18,
-         isReversed: false,
-         routeId: Testbed.routes[0].id,
-         stationId: Testbed.stations[0].id,
-      };
 
-      Log.DB("routePointAttributes.station.id =", routePointAttributes.stationId);
-
-      RoutePoint.create(routePointAttributes).then((result: RoutePointInstance): Promise<void> => {
-         expect(result).toBeTruthy();
-         SpecUtil.verifyInstance(result, routePointAttributes);
+      Testbed.createRoutePoint(
+         Testbed.routes[0],
+         Testbed.stations[0],
+      ).then((result: RoutePointInstance): Promise<void> => {
+         SpecUtil.verifyInstance(result, Testbed.lastAttributes);
          routePoint = result;
          return result.destroy();
       }).then((): Promise<RoutePointInstance> => {

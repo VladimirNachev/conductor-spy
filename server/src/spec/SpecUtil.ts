@@ -4,6 +4,7 @@ import { AnyInstance } from "../main/model";
 export class SpecUtil {
 
    public static verifyInstance(instance: AnyInstance, attributes: any): void {
+      expect(instance).toBeTruthy();
       for (const key in attributes) {
          expect(instance.get(key)).toBe(attributes[key]);
       }
