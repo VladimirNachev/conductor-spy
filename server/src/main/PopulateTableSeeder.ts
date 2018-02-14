@@ -1,3 +1,4 @@
+import { Promise } from "bluebird";
 import { DataTypes, DefineAttributes, QueryInterface, SequelizeStatic } from "sequelize";
 import { Log } from "./Log";
 import { StandardAttributes, StandardInstance } from "./model";
@@ -33,6 +34,11 @@ export class PopulateTableSeeder<TAttributes extends StandardAttributes> {
          for (const attribute of attributes) {
             attribute.createdAt = new Date();
             attribute.updatedAt = new Date();
+         }
+
+         if (attributes.length === 0) {
+            Log.DB("Nothing to add to table '" + this.tableName + "'!");
+            return Promise.resolve();
          }
 
          Log.DB("Populating table '" + this.tableName + "' with " + attributes.length +

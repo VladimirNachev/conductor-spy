@@ -17,16 +17,18 @@ interface RouteInfo {
 export = new PopulateTableSeeder<RoutePointAttributes>("RoutePoints", (): Promise<RoutePointAttributes[]> => {
    const filePath: string = path.resolve(__dirname, "../../../resources/routes.json");
    const resources: RouteInfo[] = JSON.parse(fs.readFileSync(filePath).toString());
-   const stationMap: { [stationNumber: string]: StationInstance } = {};
-   const routeMap: { [customRouteId: string]: RouteInstance } = {};
 
-   return Station.findAll().then((stations: StationInstance[]): Promise<RouteInstance[]> => {
-      for (const station of stations) {
+   return Promise.all([
+      Station.findAll(),
+      Route.findAll(),
+   ]).then((result: [StationInstance[], RouteInstance[]]): RoutePointAttributes[] => {
+      const stationMap: { [stationNumber: string]: StationInstance } = {};
+      for (const station of result[0]) {
          stationMap[station.stationNumber] = station;
       }
-      return Route.findAll();
-   }).then((routes: RouteInstance[]): RoutePointAttributes[] => {
-      for (const route of routes) {
+
+      const routeMap: { [customRouteId: string]: RouteInstance } = {};
+      for (const route of result[1]) {
          routeMap[route.vehicleType + "-" + route.routeNumber] = route;
       }
 
