@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "init": "npm run server:build && npm run db:dev:init && npm run db:test:init",
+    "client:build": "ng build --app client",
+    "client:watch": "ng build --app client --watch",
     "server:build": "./node_modules/.bin/tsc -p ./server",
     "server:watch": "./node_modules/.bin/tsc -p ./server --watch",
     "server:lint": "./node_modules/.bin/tslint -p ./server",
