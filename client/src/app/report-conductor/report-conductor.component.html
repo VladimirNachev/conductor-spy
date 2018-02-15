@@ -1,0 +1,8 @@
+<div *ngIf="stations">
+  <mat-card *ngFor="let station of stations">
+    <mat-card-title>
+      {{ station.name }}
+    </mat-card-title>
+  </mat-card>
+</div>
+<mat-spinner *ngIf="!stations"></mat-spinner>

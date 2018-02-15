@@ -16,12 +16,12 @@ export class MainMenuComponent implements OnInit {
    }
 
    public onClosestStopsButtonClicked(): void {
-      this.locationService.fetchClosest().then((result: any): void => {
-         this.error = '';
-         console.log(result);
-      }).catch((error: any): void => {
-         this.error = typeof error === 'string' ? error : error.message;
-         console.error(error);
-      });
+      // this.locationService.fetchClosest().then((result: any): void => {
+      //    this.error = '';
+      //    console.log(result);
+      // }).catch((error: any): void => {
+      //    this.error = typeof error === 'string' ? error : error.message;
+      //    console.error(error);
+      // });
    }
 }

@@ -9,6 +9,7 @@ import {
   MatCheckboxModule,
   MatIconModule,
   MatInputModule,
+  MatProgressSpinnerModule,
   MatSelectModule,
   MatSidenavModule,
   MatToolbarModule,
@@ -26,6 +27,7 @@ import {
     MatSidenavModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
   ],
   exports: [
     MatInputModule,
@@ -39,6 +41,7 @@ import {
     // FormsModule,
     BrowserAnimationsModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class MaterialModule { }
