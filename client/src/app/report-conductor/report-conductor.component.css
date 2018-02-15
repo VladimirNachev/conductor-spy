@@ -1,3 +1,39 @@
 mat-spinner {
   margin: 25px auto;
 }
+
+.title {
+  display: flex;
+  justify-content: center;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.route-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  min-width: 270px;
+  /* flex-direction: row; */
+}
+
+.direction-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.report-button div {
+  line-height: 22px;
+}
+
+.report-button {
+  padding: 5px 0;
+}

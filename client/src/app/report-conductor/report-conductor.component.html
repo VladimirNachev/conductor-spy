@@ -1,8 +1,28 @@
 <div *ngIf="stations">
   <mat-card *ngFor="let station of stations">
-    <mat-card-title>
+    <mat-card-title class="title">
       {{ station.name }}
     </mat-card-title>
+
+    <div class="content-wrapper">
+      <div class="route-rows">
+        <mat-card-content class="content" *ngFor="let route of station.routes">
+          <span>{{ route.routeType }} {{ route.routeNumber }}</span>
+
+          <span class="direction-wrapper">
+            <span>{{ route.firstStationName }}</span>
+            <span>↓</span>
+            <span>{{ route.lastStationName }}</span>
+          </span>
+        </mat-card-content>
+      </div>
+
+      <button [disabled]="station.marked" class="report-button" mat-raised-button color="primary" (click)="reportConductor(station)">
+        <div>Отбележи</div>
+        <div>контрола</div>
+      </button>
+    </div>
   </mat-card>
 </div>
+
 <mat-spinner *ngIf="!stations"></mat-spinner>

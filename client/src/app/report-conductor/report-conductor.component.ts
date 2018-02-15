@@ -3,6 +3,11 @@ import { Station } from '../model/station';
 import { StationsService } from '../stations.service';
 import { LocationService } from '../location.service';
 import { Observable } from 'rxjs/Observable';
+import * as _ from 'lodash';
+
+interface ExtendendStation extends Station {
+  marked: boolean;
+}
 
 @Component({
   selector: 'app-report-conductor',
@@ -10,16 +15,32 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./report-conductor.component.css']
 })
 export class ReportConductorComponent implements OnInit {
-  stations: Station[] = undefined;
+  stations: ExtendendStation[] = undefined;
 
   constructor(
-    stationsService: StationsService,
-    locationService: LocationService
+    private stationsService: StationsService,
+    private locationService: LocationService
   ) {
     locationService.getLocation()
       .then((location: Position) => stationsService.getCloseStations(location))
-      .then((stations$: Observable<Station[]>) => {
-        stations$.subscribe((stations: Station[]) => this.stations = stations);
+      .then((stations$: Observable<ExtendendStation[]>) => {
+        stations$.subscribe((stations: Station[]) => {
+          console.log("stations =", stations);
+          return this.stations = stations.map((station: Station): ExtendendStation => {
+            return _.extend(station, { marked: false });
+          });
+        });
+      });
+  }
+
+  private reportConductor(station: ExtendendStation): void {
+    console.log("station.service activateddddddddddddddddddddddddd");
+    station.marked = true;
+    this.stationsService.reportConductor(station)
+      .subscribe((station: Station): any => {
+
+      }, (error: any): void => {
+        station.marked = false;
       });
   }
 

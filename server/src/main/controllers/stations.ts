@@ -164,7 +164,7 @@ router.get("/", extractParams, (req: StationRequest, res: Response): any => {
          where: { id: { [sequelize.Op.in]: _.uniq(stationsToGetNamesOf) } },
       });
    }).then((result: StationInstance[]): any => {
-      const stationMap: {[id: number]: StationInstance} = {};
+      const stationMap: { [id: number]: StationInstance } = {};
       for (const station of result) {
          stationMap[station.id] = station;
       }
@@ -184,6 +184,19 @@ router.get("/:id", extractParams, (req: StationRequest, res: Response): Promise<
       .then((station: StationInstance | null): any => {
          return res.status(200).send(station);
       });
+});
+
+router.put("/:id", extractParams, (req: StationRequest, res: Response): Promise<any> => {
+   return Station.update(
+      { conductorAt: new Date().getTime() },
+      { where: { id: req.newParams.id } }
+   ).then((station: [number, StationInstance[]]): any => {
+      if (!station[0]) {
+         return res.sendStatus(404);
+      }
+
+      return res.status(200).send(station);
+   });
 });
 
 export default router;

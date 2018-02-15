@@ -1,10 +1,12 @@
-/* h1 {
-   text-align: center;
+h1 {
+  cursor: pointer;
+  outline: none;
+   /* text-align: center;
    background: rgb(200, 200, 230);
    margin-top: 0;
    border-bottom: 2px solid darkgray;
-   color: #229;
-} */
+   color: #229; */
+}
 
 .title {
   /* This fills the remaining space, by using flexbox.

@@ -19,4 +19,8 @@ export class StationsService {
       })
     });
   }
+
+  reportConductor(station: Station): Observable<Station> {
+    return this.httpClient.put<Station>(`/api/stations/${station.id}`, {});
+  }
 }
