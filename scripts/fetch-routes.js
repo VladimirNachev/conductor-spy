@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Fetch Routes
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Get the route numbers along with their types
 // @author       alalev
 // @match        https://schedules.sofiatraffic.bg
@@ -27,17 +27,8 @@
 
    function analyzeSingle(link, type) {
       const href = window.location.href + $(link).attr('href');
-      const numberMatch = href.match(/\/(\d+)$/);
-      if (numberMatch === null) {
-         remaining--;
-         resolved++;
-         $(link).css('color', 'red');
-         console.error('Skipping route ' + href + ' (' + $(link).text() +
-            ') because it has an invalid number');
-         return;
-      }
       const object = {
-         routeNumber: parseInt(numberMatch[1]),
+         routeNumber: $(link).text(),
          vehicleType: type,
          _routePoints: [],
       };

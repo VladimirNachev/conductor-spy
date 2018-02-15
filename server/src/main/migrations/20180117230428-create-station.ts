@@ -25,6 +25,6 @@ export = new NewTableMigration("Stations", (types: DataTypes): DefineAttributes 
 
    conductorAt: {
       allowNull: false,
-      type: types.INTEGER,
+      type: types.BIGINT,
    },
 }));
