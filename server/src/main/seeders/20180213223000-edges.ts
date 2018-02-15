@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { QueryInterface, SequelizeStatic } from "sequelize";
 import { Log } from "../Log";
+import { MathUtil } from "../math.util";
 import { Route, RoutePoint, Station } from "../models";
 import { EdgeAttributes } from "../models/edge";
 import { RouteInstance } from "../models/route";
@@ -10,45 +11,8 @@ import { RoutePointAttributes, RoutePointInstance } from "../models/route-point"
 import { StationInstance, } from "../models/station";
 import { PopulateTableSeeder } from "../PopulateTableSeeder";
 
-/* Spherical law of cosines:
-
-Like in stations.json:
-y1 = latitude 1
-y2 = latitude 2
-x1 = longtitude 1
-x2 = longtitude 2
-
-distance = acos(sin(y1) * sin(y2) + cos(y1) * cos(y2) * cos(x2 - x1))*RADIUS
-https://www.movable-type.co.uk/scripts/latlong.html
-*/
-
-const earthRadiusEquatorMeters: number = 6378 * 1000;
-const earthRadiusPoleMeters: number = 6356 * 1000;
-const closenessToEquator: number = 0.8;
-const earthRadiusMeters: number =
-   earthRadiusEquatorMeters * closenessToEquator +
-   earthRadiusPoleMeters * (1 - closenessToEquator);
-
-function toRadians(angle: number): number {
-   return (angle / 180.0) * Math.PI;
-}
-
-function getDistanceInMeters(station1: StationInstance, station2: StationInstance): number {
-   if (station1.latitude === station2.latitude && station1.longtitude === station2.longtitude) {
-      return 0;
-   }
-   return earthRadiusMeters * Math.acos(
-      Math.sin(toRadians(station1.latitude)) * Math.sin(toRadians(station2.latitude)) +
-      Math.cos(toRadians(station1.latitude)) * Math.cos(toRadians(station2.latitude)) *
-      Math.cos(toRadians(station2.longtitude - station1.longtitude)));
-}
-
-function kilometersPerHourToMetersPerSeconds(kmh: number): number {
-   return (kmh * 1000) / (60 * 60);
-}
-
-const busSpeed: number = kilometersPerHourToMetersPerSeconds(40);
-const humanSpeed: number = kilometersPerHourToMetersPerSeconds(5);
+const busSpeed: number = MathUtil.kilometersPerHourToMetersPerSecond(40);
+const humanSpeed: number = MathUtil.kilometersPerHourToMetersPerSecond(5);
 
 const stayCoefficient: number = 0.1;
 const maxWalkCoefficient: number = 0.3;
@@ -132,7 +96,7 @@ export = new PopulateTableSeeder<EdgeAttributes>("Edges", (): Promise<EdgeAttrib
                fromStationId: fromStation.id,
                toStationId: toStation.id,
                travelTimeMs: Math.floor(
-                  getDistanceInMeters(fromStation, toStation) / busSpeed * 1000),
+                  MathUtil.getDistanceInMeters(fromStation, toStation) / busSpeed * 1000),
                chance: busCoefficient,
             };
             originalEdges[newEdge.fromStationId].push(newEdge);
@@ -156,10 +120,7 @@ export = new PopulateTableSeeder<EdgeAttributes>("Edges", (): Promise<EdgeAttrib
             const station1: StationInstance = stations[i];
             const station2: StationInstance = stations[j];
             allPairs++;
-            const distance: number = getDistanceInMeters(station1, station2);
-            // if (distance === 0) {
-            //    Log.DB("SAME SPOT: " + station1.id + " and " + station2.id);
-            // }
+            const distance: number = MathUtil.getDistanceInMeters(station1, station2);
             const coefficient: number = getWalkCoefficient(distance);
             if (coefficient < 0.1) {
                continue;

@@ -21,7 +21,7 @@ import { LocationService } from './location.service';
     MaterialModule,
     HttpClientModule,
   ],
-  providers: [LocationService,],
-  bootstrap: [AppComponent,]
+  providers: [LocationService],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

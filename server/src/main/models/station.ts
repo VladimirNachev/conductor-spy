@@ -16,7 +16,6 @@ export interface StationInstance extends StandardInstance<StationAttributes> {
    latitude: number;
    longtitude: number;
    conductorAt: number;
-
 }
 
 export type StationModel = sequelize.Model<StationInstance, StationAttributes>;

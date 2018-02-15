@@ -11,11 +11,12 @@ Log.SERVER("Initializing...");
 const app: express.Express = express();
 app.use(bodyParser.json());
 
+const apiRouter: express.Router = express.Router();
+apiRouter.use("/stations", stations);
+apiRouter.use("/routes", routes);
+app.use("/api", apiRouter);
+
 app.use(express.static(path.join(__dirname, "../../../client/dist")));
-
-app.use("/stations", stations);
-app.use("/routes", routes);
-
 app.get("*", (req: express.Request, res: express.Response) => {
    res.sendFile(path.join(__dirname, "../../../client/dist/index.html"));
 });

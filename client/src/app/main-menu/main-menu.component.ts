@@ -8,8 +8,20 @@ import { LocationService } from '../location.service';
 })
 export class MainMenuComponent implements OnInit {
 
+   public error: string;
+
    constructor(private locationService: LocationService) { }
 
    ngOnInit() {
+   }
+
+   public onClosestStopsButtonClicked(): void {
+      this.locationService.fetchClosest().then((result: any): void => {
+         this.error = '';
+         console.log(result);
+      }).catch((error: any): void => {
+         this.error = typeof error === 'string' ? error : error.message;
+         console.error(error);
+      });
    }
 }

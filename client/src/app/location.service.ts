@@ -4,28 +4,32 @@ import { HttpClient, HttpParams, } from '@angular/common/http';
 @Injectable()
 export class LocationService {
 
-  constructor(private http: HttpClient) { }
+   constructor(private http: HttpClient) { }
 
-  public fetchClosest() {
-     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-           console.log(position);
-           this.http.get('stations', {
-              params: new HttpParams ({
-                 fromObject: {
-                    longtitude: position.coords.longitude.toString(),
-                    latitude: position.coords.latitude.toString(),
-                    accuracy: position.coords.accuracy.toString(),
-                 }
-              })
-           }).subscribe((result: any): void => {
-              console.log(result);
-           });
+   public fetchClosest(): Promise<any> {
+      return new Promise((resolve: (result: any) => void, reject: (reason: any) => void): void => {
+         if (!navigator.geolocation) {
+            reject('Geolocation is not supported by this browser.');
+            return;
+         }
 
-        });
-     } else {
-        console.log('Geolocation is not supported by this browser.');
-     }
-  }
+         navigator.geolocation.getCurrentPosition((position) => {
+            console.log(position);
+            this.http.get('api/stations', {
+               params: new HttpParams({
+                  fromObject: {
+                     longtitude: position.coords.longitude.toString(),
+                     latitude: position.coords.latitude.toString(),
+                     accuracy: position.coords.accuracy.toString(),
+                  }
+               })
+            }).subscribe((result: any): void => {
+               resolve(result);
+            });
+         }, (error: PositionError): void => {
+            reject(error);
+         });
+      });
+   }
 
 }
