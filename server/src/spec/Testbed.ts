@@ -18,7 +18,7 @@ export class Testbed {
 
    public static createRoute(attributes?: RouteAttributes): Promise<RouteInstance> {
       const defaultAttributes: RouteAttributes = {
-         routeNumber: 5,
+         routeNumber: "44-Б",
          vehicleType: "bus",
       };
       attributes = _.defaults(attributes || {}, defaultAttributes);
@@ -54,7 +54,7 @@ export class Testbed {
          stationNumber: "0" + Math.floor(Math.random() * 1000000).toString(),
          latitude: 1.12,
          longtitude: 1.52,
-         conductorAt: 1285182,
+         conductorAt: new Date().getTime(),
       };
       attributes = _.defaults(attributes || {}, defaultAttributes);
       Testbed.lastAttributes = attributes;

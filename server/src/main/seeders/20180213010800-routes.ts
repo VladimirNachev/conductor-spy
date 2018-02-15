@@ -6,7 +6,7 @@ import { RouteAttributes, } from "../models/route";
 import { PopulateTableSeeder } from "../PopulateTableSeeder";
 
 interface RouteInfo {
-   routeNumber: number;
+   routeNumber: string;
    vehicleType: string;
    _routePoints: string[];
 }

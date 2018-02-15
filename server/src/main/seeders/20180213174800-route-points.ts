@@ -9,7 +9,7 @@ import { StationInstance, } from "../models/station";
 import { PopulateTableSeeder } from "../PopulateTableSeeder";
 
 interface RouteInfo {
-   routeNumber: number;
+   routeNumber: string;
    vehicleType: string;
    _routePoints: string[];
 }
@@ -29,12 +29,12 @@ export = new PopulateTableSeeder<RoutePointAttributes>("RoutePoints", (): Promis
 
       const routeMap: { [customRouteId: string]: RouteInstance } = {};
       for (const route of result[1]) {
-         routeMap[route.vehicleType + "-" + route.routeNumber] = route;
+         routeMap[route.vehicleType + ":" + route.routeNumber] = route;
       }
 
       const attributes: RoutePointAttributes[] = [];
       for (const route of resources) {
-         const routeCustomId: string = route.vehicleType + "-" + route.routeNumber;
+         const routeCustomId: string = route.vehicleType + ":" + route.routeNumber;
          const targetRoute: RouteInstance = routeMap[routeCustomId];
          if (!targetRoute) {
             throw new Error("Could not find route '" + routeCustomId + "'");

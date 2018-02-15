@@ -4,7 +4,7 @@ import { NewTableMigration } from "../NewTableMigration";
 export = new NewTableMigration("Routes", (types: DataTypes): DefineAttributes => ({
    routeNumber: {
       allowNull: false,
-      type: types.INTEGER,
+      type: types.STRING,
    },
 
    vehicleType: {
