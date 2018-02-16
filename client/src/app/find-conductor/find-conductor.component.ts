@@ -29,6 +29,9 @@ export class FindConductorComponent implements OnInit {
    selectedSubrouteIndex: string;
    selectedSubroute: Subroute;
 
+   loadingRoutePoints: boolean = false;
+   loadingRoutes: boolean = true;
+
    constructor(private routesService: RoutesService) {
       routesService.getRoutes()
          .subscribe((routes: Route[]): any => {
@@ -47,6 +50,7 @@ export class FindConductorComponent implements OnInit {
             }
             this.vehicleTypes = Object.keys(this.routesByVehicleType);
             this.routes = this.routesByVehicleType[this.selectedVehicleType];
+            this.loadingRoutes = false;
          });
    }
 
@@ -55,6 +59,8 @@ export class FindConductorComponent implements OnInit {
    }
 
    onRouteChanged(route: Route): void {
+      this.subroutes = undefined;
+      this.loadingRoutePoints = true;
       this.routesService.getRoutePoints(route)
          .subscribe((routePoints: RoutePoint[]): any => {
             this.subroutes = [];
@@ -76,6 +82,7 @@ export class FindConductorComponent implements OnInit {
             }
             this.selectedSubroute = this.subroutes[0];
             this.selectedSubrouteIndex = this.selectedSubroute.index.toString();
+            this.loadingRoutePoints = false;
          });
    }
 

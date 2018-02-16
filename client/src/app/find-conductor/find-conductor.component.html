@@ -1,5 +1,5 @@
 <div class="container">
-   <div class="top-selections">
+   <div class="top-selections" *ngIf="!loadingRoutes">
       <mat-form-field>
          <mat-select [(value)]="selectedVehicleType" placeholder="Тип транспорт">
             <mat-option *ngFor="let vehicleType of vehicleTypes" value="{{ vehicleType }}" (click)="onVehicleTypeChanged(selectedVehicleType)">
@@ -17,13 +17,15 @@
       </mat-form-field>
    </div>
 
-   <mat-form-field class="subroute-wrapper">
+   <mat-form-field *ngIf="!loadingRoutes" class="subroute-wrapper">
       <mat-select [disabled]="!subroutes" [(value)]="selectedSubrouteIndex" placeholder="Направление">
          <mat-option *ngFor="let subroute of subroutes" value="{{ subroute.index }}" (click)="onSubrouteChanged(subroute)">
             {{ subroute.firstStationName }} -> {{ subroute.lastStationName }}
          </mat-option>
       </mat-select>
    </mat-form-field>
+   
+   <mat-spinner *ngIf="loadingRoutes"></mat-spinner>
 
    <div class="content">
       <div *ngIf="!!subroutes && selectedSubroute.routePoints">
@@ -34,5 +36,6 @@
             </mat-card-title>
          </mat-card>
       </div>
+      <mat-spinner *ngIf="loadingRoutePoints"></mat-spinner>
    </div>
 </div>
