@@ -8,6 +8,7 @@
     "member-ordering": false,
     "no-var-requires": false,
     "array-type": false,
+    "no-shadowed-variable": true,
     "object-literal-sort-keys": false,
     "interface-name": false,
     "eofline": false,

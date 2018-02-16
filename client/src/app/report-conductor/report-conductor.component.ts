@@ -43,10 +43,11 @@ export class ReportConductorComponent implements OnInit {
    private reportConductor(station: ExtendendStation): void {
       station.marked = true;
       this.stationsService.reportConductor(station)
-         .subscribe((station: Station): any => {
+         .subscribe((station1: Station): any => {
+           console.log("station1 =", station1);
            this.conductorArrivalService.markConductor({
              "stationId": station.id,
-             "arrivalTime": new Date().getTime(),
+             "arrivalTime": (new Date().getTime()).toString(),
            })
            .subscribe((conductorArrival: any): any => {
 

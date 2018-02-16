@@ -1,4 +1,4 @@
 export interface ConductorArrival {
-  arrivalTime: number;
+  arrivalTime: string;
   stationId: number;
 }

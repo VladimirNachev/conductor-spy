@@ -189,13 +189,13 @@ router.get("/:id", extractParams, (req: StationRequest, res: Response): Promise<
 router.put("/:id", extractParams, (req: StationRequest, res: Response): Promise<any> => {
    return Station.update(
       { conductorAt: new Date().getTime() },
-      { where: { id: req.newParams.id } },
+      { where: { id: req.newParams.id }, returning: true }
    ).then((station: [number, StationInstance[]]): any => {
       if (!station[0]) {
          return res.sendStatus(404);
       }
 
-      return res.status(200).send(station);
+      return res.status(200).send(station[1]);
    });
 });
 

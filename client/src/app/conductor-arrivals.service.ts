@@ -13,6 +13,7 @@ export class ConductorArrivalsService {
   }
 
   markConductor(conductorArrival: ConductorArrival): Observable<ConductorArrival> {
+    console.log("conductorArrival =", conductorArrival);
     return this.httpClient.get<ConductorArrival>('/api/conductorArrivals', {
       params: new HttpParams({
         fromObject: {

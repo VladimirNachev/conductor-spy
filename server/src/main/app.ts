@@ -23,6 +23,6 @@ app.get("*", (req: express.Request, res: express.Response) => {
    res.sendFile(path.join(__dirname, "../../../client/dist/index.html"));
 });
 
-app.listen(3000, () => Log.SERVER("Started listening on port 3000"));
+// app.listen(3000, () => Log.SERVER("Started listening on port 3000"));
 
 export default app;

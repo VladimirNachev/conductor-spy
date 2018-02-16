@@ -19,4 +19,4 @@ Log.DB("Serverrrrrrrrrrrrrrrrrrrrrr");
 // }, oneDayMs);
 
 
-app.listen(3000, () => Log.SERVER("Started listening on port 3000."));
+app.listen(3000, () => console.log("Started listening on port 3000."));
