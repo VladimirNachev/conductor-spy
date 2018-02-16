@@ -1,4 +1,4 @@
-[TOC]
+
 
 # Conductor Spy
 
@@ -33,30 +33,25 @@ The technologies we use
 Our progress so far
 ---
 
-Progress: Core/config
-- Set DB(s) up
-- TSLint
-- Jasmine
-- Travis CI
 
-
-![Progress](http://progressed.io/bar/50?title=Server)
+![Progress](http://progressed.io/bar/90?title=Server)
 - Database (Sequelize & PostgreSQL)
    - [x] Routes - all the public transport routes - buses, trolleys, trams
       - id: integer
-      - number: integer (94, 102, 280, ...)
-      - type: text/string ("Bus", "Trolley", "Tram")
+      - routeNumber: text/string (94, 102, 280, **44-Б**, etc.)
+      - vehicleType: text/string ("Bus", "Trolleybus", "Tram")
    - [x] Stations - the places where the transport stops
        - id - integer
        - name - text/string
-       - location - (GPS coordinates)
-       - conductorAt - integer
+       - longtitude - double
+       - latitude - double
+       - conductorAt - bigint
    - [x] RoutePoints - the stations for each route
       - id - integer
       - routeId - integer
       - stationId - integer
       - index - integer
-      - isReversed - boolean
+      - subrouteIndex - integer
    - [x] Edges
       - id: integer
       - fromStationId: integer
@@ -64,23 +59,11 @@ Progress: Core/config
       - chance: double
       - travelTimeMs: integer (milliseconds)
 
-![Progress](http://progressed.io/bar/0?title=Client)
-- Core? (http услугите, etc.)
-   - [ ] DataService
-- Common? (които се използват и за двете)
-   - [ ] Route list
-- Report? (записването на кондуктори)
-   - [ ] ...
-- Spot? (виждането на записани)
-   - [ ] ...
-
-![Progress](http://progressed.io/bar/50?title=UX/Design)
+![Progress](http://progressed.io/bar/100?title=Client)
 - Client
-    - Core? (http услугите, etc.)
-       - [ ] DataService
-    - Common? (които се използват и за двете)
-       - [ ] Route list
-    - Report? (записването на кондуктори)
-       - [ ] ...
-    - Spot? (виждането на записани)
-       - [ ] ...
+    - Views
+      - [x] Report
+      - [x] Find
+    - Services
+      - [x] LocationService
+      - [x] StationsService
