@@ -11,6 +11,9 @@ import { ReportConductorComponent } from './report-conductor/report-conductor.co
 
 import { LocationService } from './location.service';
 import { StationsService } from './stations.service';
+import { RoutesService } from './routes.service';
+import { FindConductorComponent } from './find-conductor/find-conductor.component';
+import { DangerIndicatorComponent } from './danger-indicator/danger-indicator.component';
 
 const appRoutes: Routes = [
   {
@@ -21,6 +24,10 @@ const appRoutes: Routes = [
     path: 'report',
     component: ReportConductorComponent,
   },
+  {
+    path: 'find',
+    component: FindConductorComponent,
+  },
 ];
 
 @NgModule({
@@ -29,6 +36,8 @@ const appRoutes: Routes = [
     HeaderComponent,
     MainMenuComponent,
     ReportConductorComponent,
+    FindConductorComponent,
+    DangerIndicatorComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +48,7 @@ const appRoutes: Routes = [
   providers: [
     LocationService,
     StationsService,
+    RoutesService,
   ],
   bootstrap: [AppComponent]
 })

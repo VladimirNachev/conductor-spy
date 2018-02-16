@@ -2,7 +2,7 @@ import { Promise } from "bluebird";
 import { Request, Response } from "express";
 import * as _ from "lodash";
 import * as sequelize from "sequelize";
-import { ConductorUtil, StationWithConductorInfo } from "../conductor.util";
+import { ConductorUtil, StationWithArrivalInfo } from "../conductor.util";
 import { Log } from "../Log";
 import { Edge, Route, RoutePoint, Station } from "../models";
 import { EdgeInstance } from "../models/edge";
@@ -43,17 +43,17 @@ router.get("/:id/points", extractParams, (req: RouteRequest, res: Response): any
 
    return RoutePoint.findAll({
       where: { routeId: req.newParams.id },
-   }).then((result: RoutePointInstance[]): Promise<{ [id: number]: StationWithConductorInfo }> => {
+   }).then((result: RoutePointInstance[]): Promise<{ [id: number]: StationWithArrivalInfo }> => {
       routePoints = result;
       const stationIds: number[] = routePoints
          .map((routePoint: RoutePointInstance): number => routePoint.stationId);
 
       return ConductorUtil.getConductorArrivalInfo(stationIds);
-   }).then((result: { [id: number]: StationWithConductorInfo }): any => {
+   }).then((result: { [id: number]: StationWithArrivalInfo }): any => {
       return res.status(200).send(routePoints.map((routePoint: RoutePointInstance): any => {
          return _.extend(_.pick(routePoint, "id", "index", "subrouteIndex"), {
             stationName: result[routePoint.stationId].name,
-            conductors: result[routePoint.stationId].conductors,
+            arrivals: result[routePoint.stationId].arrivals,
          });
       }));
    });

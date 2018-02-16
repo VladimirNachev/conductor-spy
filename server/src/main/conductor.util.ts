@@ -5,19 +5,19 @@ import { Edge, Station } from "./models";
 import { EdgeInstance } from "./models/edge";
 import { StationInstance } from "./models/station";
 
-export interface ConductorInfo {
+export interface ConductorArrival {
    arrivalTime: number;
    arrivalChance: number;
 }
 
-export interface StationWithConductorInfo extends StationInstance {
-   conductors: ConductorInfo[];
+export interface StationWithArrivalInfo extends StationInstance {
+   arrivals: ConductorArrival[];
 }
 
 export class ConductorUtil {
 
    public static getConductorArrivalInfo(stations: { id: number }[] | number[]):
-      Promise<{ [id: number]: StationWithConductorInfo }> {
+      Promise<{ [id: number]: StationWithArrivalInfo }> {
 
       const stationIds: number[] = [];
       for (const station of stations) {
@@ -26,7 +26,7 @@ export class ConductorUtil {
             : station.id);
       }
 
-      const arrivalInfo: { [stationId: number]: ConductorInfo[] } = {};
+      const arrivalInfo: { [stationId: number]: ConductorArrival[] } = {};
       const stationMap: { [id: number]: StationInstance } = {};
       let edges: EdgeInstance[];
 
@@ -44,7 +44,7 @@ export class ConductorUtil {
             edges.map((edge: EdgeInstance): number => edge.fromStationId));
 
          return Station.findAll({ where: { id: { [sequelize.Op.in]: ids } } });
-      }).then((result: StationInstance[]): { [id: number]: StationWithConductorInfo } => {
+      }).then((result: StationInstance[]): { [id: number]: StationWithArrivalInfo } => {
          for (const station of result) {
             sourceStationMap[station.id] = station;
          }
@@ -54,7 +54,8 @@ export class ConductorUtil {
          // const timeDeltaLimitMs: number = Infinity;
          const currentTime: number = new Date().getTime();
          for (const edge of edges) {
-            const conductorAt: number = sourceStationMap[edge.fromStationId].conductorAt +
+            const conductorAt: number =
+               parseInt(sourceStationMap[edge.fromStationId].conductorAt, 10) +
                edge.travelTimeMs;
             if (currentTime - conductorAt > timeDeltaLimitMs) {
                continue;
@@ -66,10 +67,10 @@ export class ConductorUtil {
             });
          }
 
-         const stationsWithInfo: { [id: number]: StationWithConductorInfo } = {};
+         const stationsWithInfo: { [id: number]: StationWithArrivalInfo } = {};
          for (const stationId in stationMap) {
             stationsWithInfo[stationId] = _.extend(stationMap[stationId], {
-               conductors: arrivalInfo[stationId] || [],
+               arrivals: arrivalInfo[stationId] || [],
             });
          }
          return stationsWithInfo;

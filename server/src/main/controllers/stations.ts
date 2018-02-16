@@ -2,14 +2,14 @@ import { Promise } from "bluebird";
 import { Request, Response } from "express";
 import * as _ from "lodash";
 import * as sequelize from "sequelize";
-import { ConductorInfo, ConductorUtil, StationWithConductorInfo } from "../conductor.util";
+import { ConductorArrival, ConductorUtil, StationWithArrivalInfo } from "../conductor.util";
 import { Log } from "../Log";
 import { GeoLocation, MathUtil } from "../math.util";
-import { Edge, Station, RoutePoint, Route } from "../models";
+import { Edge, Route, RoutePoint, Station } from "../models";
 import { EdgeInstance } from "../models/edge";
-import { StationInstance } from "../models/station";
-import { RoutePointInstance } from "../models/route-point";
 import { RouteInstance } from "../models/route";
+import { RoutePointInstance } from "../models/route-point";
+import { StationInstance } from "../models/station";
 
 const router: any = require("express-promise-router")();
 
@@ -50,7 +50,7 @@ interface StationResponse {
    id: number;
    name: string;
    distance: number;
-   conductors: ConductorInfo[];
+   arrivals: ConductorArrival[];
    routes: RouteInfo[];
 }
 
@@ -68,7 +68,7 @@ router.get("/", extractParams, (req: StationRequest, res: Response): any => {
 
    let responses: StationResponse[] = [];
 
-   type BulkResult1 = [{ [id: number]: StationWithConductorInfo }, RoutePointInstance[]];
+   type BulkResult1 = [{ [id: number]: StationWithArrivalInfo }, RoutePointInstance[]];
    type BulkResult2 = [RoutePointInstance[], RouteInstance[]];
 
    let routePoints: RoutePointInstance[];
@@ -81,7 +81,7 @@ router.get("/", extractParams, (req: StationRequest, res: Response): any => {
             id: station.id,
             name: station.name,
             distance: MathUtil.getDistanceInMeters(station, { longtitude, latitude }),
-            conductors: [],
+            arrivals: [],
             routes: [],
          });
       }
@@ -94,11 +94,11 @@ router.get("/", extractParams, (req: StationRequest, res: Response): any => {
 
       return Promise.all([
          ConductorUtil.getConductorArrivalInfo(responses),
-         RoutePoint.findAll({ where: { stationId: { [sequelize.Op.in]: stationIds } } })
+         RoutePoint.findAll({ where: { stationId: { [sequelize.Op.in]: stationIds } } }),
       ]);
    }).then((result: BulkResult1): Promise<BulkResult2> => {
       for (const station of responses) {
-         station.conductors = result[0][station.id].conductors;
+         station.arrivals = result[0][station.id].arrivals;
       }
       const routeIds: number[] = _.uniq(result[1]
          .map((routePoint: RoutePointInstance): number => routePoint.routeId));
@@ -134,11 +134,11 @@ router.get("/", extractParams, (req: StationRequest, res: Response): any => {
       const stationsToGetNamesOf: number[] = [];
 
       for (const station of responses) {
-         const routePoints: RoutePointInstance[] = routePointMap[station.id] || [];
-         for (const routePoint of routePoints) {
+         const stationRoutePoints: RoutePointInstance[] = routePointMap[station.id] || [];
+         for (const routePoint of stationRoutePoints) {
 
             const index: number = routePointIndices[routePoint.id];
-            let firstIndex: number = index - result[0][index].index;
+            const firstIndex: number = index - result[0][index].index;
             let lastIndex: number = index;
             while (lastIndex < result[0].length - 1
                && result[0][lastIndex + 1].index === result[0][lastIndex].index + 1) {
@@ -189,7 +189,7 @@ router.get("/:id", extractParams, (req: StationRequest, res: Response): Promise<
 router.put("/:id", extractParams, (req: StationRequest, res: Response): Promise<any> => {
    return Station.update(
       { conductorAt: new Date().getTime() },
-      { where: { id: req.newParams.id } }
+      { where: { id: req.newParams.id } },
    ).then((station: [number, StationInstance[]]): any => {
       if (!station[0]) {
          return res.sendStatus(404);
