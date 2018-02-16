@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/VladimirNachev/conductor-spy.svg?branch=master)](https://travis-ci.org/VladimirNachev/conductor-spy)
 
 
 # Conductor Spy
