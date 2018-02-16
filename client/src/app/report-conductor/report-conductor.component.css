@@ -24,6 +24,15 @@ mat-spinner {
   /* flex-direction: row; */
 }
 
+.note {
+   background: lightblue;
+}
+
+.warning {
+   color: darkred;
+   background: lightyellow;
+}
+
 .direction-wrapper {
   display: flex;
   flex-direction: column;
