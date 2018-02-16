@@ -37,6 +37,7 @@ mat-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 240px;
 }
 
 .report-button div {
@@ -45,4 +46,17 @@ mat-spinner {
 
 .report-button {
   padding: 5px 0;
+  max-height: 64px;
 }
+
+mat-card {
+   padding-top: 12px;
+   padding-bottom: 12px;
+}
+
+.vehicle-type {
+   min-width: 100px;
+   padding-right: 20px;
+   font-weight: bold;
+}
+

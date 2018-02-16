@@ -6,43 +6,49 @@ import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 
 interface ExtendendStation extends Station {
-  marked: boolean;
+   marked: boolean;
 }
 
 @Component({
-  selector: 'app-report-conductor',
-  templateUrl: './report-conductor.component.html',
-  styleUrls: ['./report-conductor.component.css']
+   selector: 'app-report-conductor',
+   templateUrl: './report-conductor.component.html',
+   styleUrls: ['./report-conductor.component.css']
 })
 export class ReportConductorComponent implements OnInit {
-  stations: ExtendendStation[] = undefined;
+   stations: ExtendendStation[] = undefined;
 
-  constructor(
-    private stationsService: StationsService,
-    private locationService: LocationService
-  ) {
-    locationService.getLocation()
-      .then((location: Position) => stationsService.getCloseStations(location))
-      .then((stations$: Observable<ExtendendStation[]>) => {
-        stations$.subscribe((stations: Station[]) => {
-          return this.stations = stations.map((station: Station): ExtendendStation => {
-            return _.extend(station, { marked: false });
-          });
-        });
-      });
-  }
+   vehicleTypeLabels: { [key: string]: string } = {
+      bus: "Автобус",
+      tram: "Трамвай",
+      trolleybus: "Тролейбус",
+   };
 
-  private reportConductor(station: ExtendendStation): void {
-    station.marked = true;
-    this.stationsService.reportConductor(station)
-      .subscribe((station: Station): any => {
+   constructor(
+      private stationsService: StationsService,
+      private locationService: LocationService
+   ) {
+      locationService.getLocation()
+         .then((location: Position) => stationsService.getCloseStations(location))
+         .then((stations$: Observable<ExtendendStation[]>) => {
+            stations$.subscribe((stations: Station[]) => {
+               return this.stations = stations.map((station: Station): ExtendendStation => {
+                  return _.extend(station, { marked: false });
+               });
+            });
+         });
+   }
 
-      }, (error: any): void => {
-        station.marked = false;
-      });
-  }
+   private reportConductor(station: ExtendendStation): void {
+      station.marked = true;
+      this.stationsService.reportConductor(station)
+         .subscribe((station: Station): any => {
 
-  ngOnInit() {
-  }
+         }, (error: any): void => {
+            station.marked = false;
+         });
+   }
+
+   ngOnInit() {
+   }
 
 }

@@ -7,7 +7,7 @@
       <div class="content-wrapper">
          <div class="route-rows">
             <mat-card-content class="content" *ngFor="let route of station.routes">
-               <span>{{ route.routeType }} {{ route.routeNumber }}</span>
+               <span class="vehicle-type">{{ vehicleTypeLabels[route.routeType] }} {{ route.routeNumber }}</span>
 
                <span class="direction-wrapper">
                   <span>{{ route.firstStationName }}</span>

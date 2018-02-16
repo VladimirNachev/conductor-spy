@@ -11,12 +11,12 @@ import * as _ from 'lodash';
    templateUrl: './find-conductor.component.html',
    styleUrls: ['./find-conductor.component.css']
 })
-export class FindConductorComponent implements OnInit {
-   vehicleTypeLabels: {[key: string]: string} = {
-      bus: "Автобус",
-      tram: "Трамвай",
-      trolleybus: "Тролейбус",
-   };
+   export class FindConductorComponent implements OnInit {
+      vehicleTypeLabels: {[key: string]: string} = {
+         bus: "Автобус",
+         tram: "Трамвай",
+         trolleybus: "Тролейбус",
+      };
    selectedVehicleType: string = "bus";
    vehicleTypes: string[] = [];
 
