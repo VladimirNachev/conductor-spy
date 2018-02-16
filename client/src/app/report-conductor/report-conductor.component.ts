@@ -25,7 +25,6 @@ export class ReportConductorComponent implements OnInit {
       .then((location: Position) => stationsService.getCloseStations(location))
       .then((stations$: Observable<ExtendendStation[]>) => {
         stations$.subscribe((stations: Station[]) => {
-          console.log("stations =", stations);
           return this.stations = stations.map((station: Station): ExtendendStation => {
             return _.extend(station, { marked: false });
           });
@@ -34,7 +33,6 @@ export class ReportConductorComponent implements OnInit {
   }
 
   private reportConductor(station: ExtendendStation): void {
-    console.log("station.service activateddddddddddddddddddddddddd");
     station.marked = true;
     this.stationsService.reportConductor(station)
       .subscribe((station: Station): any => {

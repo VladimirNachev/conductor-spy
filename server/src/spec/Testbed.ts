@@ -54,7 +54,7 @@ export class Testbed {
          stationNumber: "0" + Math.floor(Math.random() * 1000000).toString(),
          latitude: 1.12,
          longtitude: 1.52,
-         conductorAt: new Date().getTime(),
+         conductorAt: new Date().getTime().toString(),
       };
       attributes = _.defaults(attributes || {}, defaultAttributes);
       Testbed.lastAttributes = attributes;

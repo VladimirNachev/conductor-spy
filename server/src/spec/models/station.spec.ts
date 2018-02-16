@@ -11,6 +11,7 @@ describe("The Station model", (): void => {
       let station: StationInstance;
 
       Testbed.createStation().then((result: StationInstance): Promise<void> => {
+         SpecUtil.verifyInstance(result, Testbed.lastAttributes);
          station = result;
          return result.destroy();
       }).then((): Promise<StationInstance> => {

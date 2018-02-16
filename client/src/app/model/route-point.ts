@@ -1,8 +1,9 @@
 import { ConductorArrival } from './conductor-info';
 
-export interface Station {
+export interface RoutePoint {
   id: number;
-  name: string;
-  distance: number;
+  index: number;
+  subrouteIndex: number;
+  stationName: string;
   arrivals: ConductorArrival[];
 }

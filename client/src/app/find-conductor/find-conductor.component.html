@@ -1,0 +1,38 @@
+<div class="container">
+   <div class="top-selections">
+      <mat-form-field>
+         <mat-select [(value)]="selectedVehicleType" placeholder="Тип транспорт">
+            <mat-option *ngFor="let vehicleType of vehicleTypes" value="{{ vehicleType }}" (click)="onVehicleTypeChanged(selectedVehicleType)">
+               {{ vehicleTypeLabels[vehicleType] }}
+            </mat-option>
+         </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+         <mat-select placeholder="Маршрут" [(value)]="selectedRouteId">
+            <mat-option *ngFor="let route of routes" value="{{ route.id }}" (click)="onRouteChanged(route)">
+               {{ route.routeNumber }}
+            </mat-option>
+         </mat-select>
+      </mat-form-field>
+   </div>
+
+   <mat-form-field class="subroute-wrapper">
+      <mat-select [disabled]="!subroutes" [(value)]="selectedSubrouteIndex" placeholder="Направление">
+         <mat-option *ngFor="let subroute of subroutes" value="{{ subroute.index }}" (click)="onSubrouteChanged(subroute)">
+            {{ subroute.firstStationName }} -> {{ subroute.lastStationName }}
+         </mat-option>
+      </mat-select>
+   </mat-form-field>
+
+   <div class="content">
+      <div *ngIf="!!subroutes && selectedSubroute.routePoints">
+         <mat-card *ngFor="let routePoint of selectedSubroute.routePoints">
+            <mat-card-title class="route-point-title">
+               {{ routePoint.stationName }}
+               <app-danger-indicator [arrivals]="routePoint.arrivals"></app-danger-indicator>
+            </mat-card-title>
+         </mat-card>
+      </div>
+   </div>
+</div>
