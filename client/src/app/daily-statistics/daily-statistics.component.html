@@ -1,0 +1,34 @@
+<div *ngIf="stations">
+   <mat-card *ngFor="let station of stations">
+      <mat-card-title class="title">
+         {{ station.name }}
+      </mat-card-title>
+
+      <div class="content-wrapper">
+         <div class="route-rows">
+            <mat-card-content class="content" *ngFor="let route of station.routes">
+               <span class="vehicle-type">{{ vehicleTypeLabels[route.routeType] }} {{ route.routeNumber }}</span>
+
+               <span class="direction-wrapper">
+                  <span>{{ route.firstStationName }}</span>
+                  <span>↓</span>
+                  <span>{{ route.lastStationName }}</span>
+               </span>
+            </mat-card-content>
+         </div>
+      </div>
+
+      <div>
+        <mat-card-content>Отбелязвания на контрола в последния ден</mat-card-content>
+      </div>
+
+      <div *ngFor="let arrival of arrivalsTo(station)">
+        {{ arrival }}
+      </div>
+
+   </mat-card>
+   <mat-card *ngIf="!!stations.length" class="note">Показаните спирки са най-близките до Вас.</mat-card>
+   <mat-card *ngIf="!stations.length" class="warning">Няма спирки в близост до Вас!</mat-card>
+</div>
+
+<mat-spinner *ngIf="!stations"></mat-spinner>

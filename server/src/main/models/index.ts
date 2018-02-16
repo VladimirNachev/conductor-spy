@@ -7,6 +7,7 @@ import { EdgeModel } from "./edge";
 import { RouteModel } from "./route";
 import { RoutePointModel } from "./route-point";
 import { StationModel } from "./station";
+import { ConductorArrivalModel } from './conductor-arrival';
 
 Log.DB("Initializing...");
 
@@ -18,11 +19,13 @@ const models: ModelContainer = {
    Station: getModel("station"),
    Route: getModel("route"),
    RoutePoint: getModel("route-point"),
+   ConductorArrival: getModel("conductor-arrival"),
 };
 export const Station: StationModel = models.Station;
 export const Edge: EdgeModel = models.Edge;
 export const Route: RouteModel = models.Route;
 export const RoutePoint: RoutePointModel = models.RoutePoint;
+export const ConductorArrival: ConductorArrivalModel = models.ConductorArrival;
 
 // Helper functions
 const abstractModels: { [modelName: string]: any } = models;

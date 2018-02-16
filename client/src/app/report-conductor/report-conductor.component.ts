@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Station } from '../model/station';
 import { StationsService } from '../stations.service';
 import { LocationService } from '../location.service';
+import { ConductorArrivalsService } from '../conductor-arrivals.service';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 
@@ -25,7 +26,8 @@ export class ReportConductorComponent implements OnInit {
 
    constructor(
       private stationsService: StationsService,
-      private locationService: LocationService
+      private locationService: LocationService,
+      private conductorArrivalService: ConductorArrivalsService,
    ) {
       locationService.getLocation()
          .then((location: Position) => stationsService.getCloseStations(location))
@@ -42,7 +44,14 @@ export class ReportConductorComponent implements OnInit {
       station.marked = true;
       this.stationsService.reportConductor(station)
          .subscribe((station: Station): any => {
+           this.conductorArrivalService.markConductor({
+             "stationId": station.id,
+             "arrivalTime": new Date().getTime(),
+           })
+           .subscribe((conductorArrival: any): any => {
 
+           }, (error: any): void => {
+          });
          }, (error: any): void => {
             station.marked = false;
          });

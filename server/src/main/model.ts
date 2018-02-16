@@ -14,6 +14,7 @@ export interface ModelContainer {
    Edge: AnyModel;
    Route: AnyModel;
    RoutePoint: AnyModel;
+   ConductorArrival: AnyModel;
 }
 
 type AnyModel = sequelize.Model<any, any>;

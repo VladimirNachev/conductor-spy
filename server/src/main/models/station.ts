@@ -65,6 +65,11 @@ export default function (database: Sequelize, types: DataTypes): StationModel {
          onDelete: "cascade",
          hooks: true,
       });
+      station.hasMany(models.ConductorArrival, {
+         foreignKey: "stationId",
+         onDelete: "cascade",
+         hooks: true,
+      });
    };
 
    return station;
