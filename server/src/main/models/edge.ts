@@ -30,7 +30,7 @@ export interface EdgeInstance extends StandardInstance<EdgeAttributes> {
 export type EdgeModel = sequelize.Model<EdgeInstance, EdgeAttributes>;
 
 export default function (database: Sequelize, types: DataTypes): EdgeModel {
-   const edge: EdgeModel = database.define("Edge", {
+   const edge: EdgeModel = database.define<EdgeInstance, EdgeAttributes>("Edge", {
       chance: {
          allowNull: false,
          type: types.DOUBLE,

@@ -53,6 +53,6 @@
     "@types/sequelize": "^4.27.3",
     "express": "^4.16.2",
     "express-promise-router": "^3.0.1",
-    "sequelize": "^4.31.2"
+    "sequelize": "^4.39.0"
   }
 }
