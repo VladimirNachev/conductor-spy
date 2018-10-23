@@ -22,6 +22,6 @@ describe("The RoutePoint model", (): void => {
          return RoutePoint.findById(routePoint.id);
       }).then((result: RoutePointInstance): void => {
          expect(result).toBeFalsy();
-      }).then(done).catch(done.fail);
+      }).then(done).catch(done);
    });
 });

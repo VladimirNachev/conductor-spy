@@ -40,7 +40,8 @@
   "devDependencies": {
     "@types/jasmine": "^2.8.4",
     "gulp": "^3.9.1",
-    "jasmine": "^2.8.0",
+    "istanbul": "^0.4.5",
+    "jasmine": "^3.2.0",
     "pg": "^7.4.1",
     "sequelize-cli": "^3.2.0",
     "tslint": "^5.9.1",

@@ -16,6 +16,6 @@ describe("The Route model", (): void => {
          return Route.findById(route.id);
       }).then((result: RouteInstance): void => {
          expect(result).toBeFalsy();
-      }).then(done).catch(done.fail);
+      }).then(done).catch(done);
    });
 });

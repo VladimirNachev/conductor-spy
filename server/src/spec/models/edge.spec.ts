@@ -19,6 +19,6 @@ describe("The Edge model", (): void => {
          return Edge.findById(edge.id);
       }).then((result: EdgeInstance): void => {
          expect(result).toBeFalsy();
-      }).then(done).catch(done.fail);
+      }).then(done).catch(done);
    });
 });

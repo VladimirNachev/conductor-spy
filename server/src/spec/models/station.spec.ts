@@ -1,3 +1,4 @@
+import { Promise } from "bluebird";
 import { Op } from "sequelize";
 import { Log } from "../../main/Log";
 import { Edge, Station } from "../../main/models";
@@ -18,14 +19,16 @@ describe("The Station model", (): void => {
          return Station.findById(station.id);
       }).then((result: StationInstance): void => {
          expect(result).toBeFalsy();
-      }).then(done).catch(done.fail);
+      }).then(done).catch(done);
    });
 
    it("does not allow duplicate station numbers", (done: DoneFn): void => {
-      Testbed.createStation().then((result: StationInstance): Promise<StationInstance> => {
-         return Testbed.createStation({ stationNumber: result.stationNumber });
-      }).then((): void => {
-         done.fail("The creation of the station with the same number should have failed");
-      }).catch(done);
+      Testbed.createStation().then((result: StationInstance): void => {
+         Testbed.createStation({ stationNumber: result.stationNumber })
+            .then(() => {
+               done(new Error("The creation of the station with the same number should have failed"));
+            })
+            .catch(() => done(undefined));
+      });
    });
 });

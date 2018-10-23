@@ -16,9 +16,9 @@ beforeEach((done: DoneFn): void => {
          Testbed.createEdge(Testbed.stations[0], Testbed.stations[1]),
          Testbed.createRoutePoint(Testbed.routes[0], Testbed.stations[0]),
       ]);
-   }).then(done).catch(done.fail);
+   }).then(done).catch(done);
 });
 
 afterEach((done: DoneFn): void => {
-   Testbed.destroyAll().then(done).catch(done.fail);
+   Testbed.destroyAll().then(done).catch(done);
 });
