@@ -1,4 +1,3 @@
-import { Promise } from "bluebird";
 import { DataTypes, DefineAttributes, QueryInterface, SequelizeStatic } from "sequelize";
 import { Log } from "./Log";
 import { StandardAttributes, StandardInstance } from "./model";
@@ -60,7 +59,7 @@ export class PopulateTableSeeder<TAttributes extends StandardAttributes> {
 
    private clearTable(queryInterface: QueryInterface): Promise<void> {
       Log.DB("Clearing table '" + this.tableName + "'...");
-      return queryInterface.bulkDelete(this.tableName, {}).then((): void => {
+      return Promise.resolve(queryInterface.bulkDelete(this.tableName, {})).then((): void => {
          Log.DB("Done clearing table '" + this.tableName + "'");
       });
    }

@@ -1,34 +1,24 @@
-import { Promise } from "bluebird";
-import { Op } from "sequelize";
-import { Log } from "../../main/Log";
-import { Edge, Station } from "../../main/models";
-import { EdgeAttributes, EdgeInstance } from "../../main/models/edge";
+import { Station } from "../../main/models";
 import { StationAttributes, StationInstance } from "../../main/models/station";
 import { SpecUtil } from "../SpecUtil";
 import { Testbed } from "../Testbed";
 
 describe("The Station model", (): void => {
-   it("can be created and destroyed", (done: DoneFn): void => {
-      let station: StationInstance;
+   it("can be created and destroyed", async () => {
+      const station: StationInstance = await Testbed.createStation();
+      SpecUtil.verifyInstance(station, Testbed.lastAttributes);
+      await station.destroy();
 
-      Testbed.createStation().then((result: StationInstance): Promise<void> => {
-         SpecUtil.verifyInstance(result, Testbed.lastAttributes);
-         station = result;
-         return result.destroy();
-      }).then((): Promise<StationInstance> => {
-         return Station.findById(station.id);
-      }).then((result: StationInstance): void => {
-         expect(result).toBeFalsy();
-      }).then(done).catch(done);
+      expect(await Station.findById(station.id)).toBeFalsy();
    });
 
-   it("does not allow duplicate station numbers", (done: DoneFn): void => {
-      Testbed.createStation().then((result: StationInstance): void => {
-         Testbed.createStation({ stationNumber: result.stationNumber })
-            .then(() => {
-               done(new Error("The creation of the station with the same number should have failed"));
-            })
-            .catch(() => done(undefined));
-      });
+   it("does not allow duplicate station numbers", async () => {
+      const firstStation: StationInstance =
+         await Testbed.createStation();
+
+      let cannotCreateStation: boolean = false;
+      await Testbed.createStation({ stationNumber: firstStation.stationNumber })
+         .catch(() => { cannotCreateStation = true; });
+      expect(cannotCreateStation).toBe(true);
    });
 });
