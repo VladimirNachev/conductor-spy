@@ -41,7 +41,7 @@ export class NewTableMigration {
          type: sequelize.DATE,
       };
 
-      return queryInterface.createTable(this.tableName, attributes);
+      return Promise.resolve(queryInterface.createTable(this.tableName, attributes));
    }
 
    /**
@@ -51,6 +51,6 @@ export class NewTableMigration {
     * @param sequelize The database connection
     */
    public down(queryInterface: QueryInterface, sequelize: SequelizeStatic): Promise<void> {
-      return queryInterface.dropTable(this.tableName);
+      return Promise.resolve(queryInterface.dropTable(this.tableName));
    }
 }

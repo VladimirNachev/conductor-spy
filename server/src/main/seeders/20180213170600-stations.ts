@@ -1,4 +1,3 @@
-import { Promise } from "bluebird";
 import * as fs from "fs";
 import * as path from "path";
 import { QueryInterface, SequelizeStatic } from "sequelize";

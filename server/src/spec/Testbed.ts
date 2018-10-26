@@ -1,6 +1,4 @@
-import { Promise } from "bluebird";
 import * as _ from "lodash";
-import { Model } from "sequelize";
 import { AnyInstance, StandardAttributes } from "../main/model";
 import { Edge, Route, RoutePoint, Station } from "../main/models";
 import { EdgeAttributes, EdgeInstance } from "../main/models/edge";
@@ -16,7 +14,7 @@ export class Testbed {
 
    public static lastAttributes: StandardAttributes;
 
-   public static createRoute(attributes?: RouteAttributes): Promise<RouteInstance> {
+   public static async createRoute(attributes?: RouteAttributes): Promise<RouteInstance> {
       const defaultAttributes: RouteAttributes = {
          routeNumber: "44-Б",
          vehicleType: "bus",
@@ -24,13 +22,12 @@ export class Testbed {
       attributes = _.defaults(attributes || {}, defaultAttributes);
       Testbed.lastAttributes = attributes;
 
-      return Route.create(attributes).then((result: RouteInstance): RouteInstance => {
-         Testbed.routes.push(result);
-         return result;
-      });
+      const result: RouteInstance = await Route.create(attributes);
+      Testbed.routes.push(result);
+      return result;
    }
 
-   public static createEdge(station1: StationInstance,
+   public static async createEdge(station1: StationInstance,
       station2: StationInstance, attributes?: EdgeAttributes): Promise<EdgeInstance> {
 
       const defaultAttributes: EdgeAttributes = {
@@ -42,13 +39,12 @@ export class Testbed {
       attributes = _.defaults(attributes || {}, defaultAttributes);
       Testbed.lastAttributes = attributes;
 
-      return Edge.create(attributes).then((result: EdgeInstance): EdgeInstance => {
-         Testbed.edges.push(result);
-         return result;
-      });
+      const result: EdgeInstance = await Edge.create(attributes);
+      Testbed.edges.push(result);
+      return result;
    }
 
-   public static createStation(attributes?: StationAttributes): Promise<StationInstance> {
+   public static async createStation(attributes?: StationAttributes): Promise<StationInstance> {
       const defaultAttributes: StationAttributes = {
          name: "some-station",
          stationNumber: "0" + Math.floor(Math.random() * 1000000).toString(),
@@ -65,7 +61,7 @@ export class Testbed {
       });
    }
 
-   public static createRoutePoint(route: RouteInstance, station: StationInstance,
+   public static async createRoutePoint(route: RouteInstance, station: StationInstance,
       attributes?: RoutePointAttributes): Promise<RoutePointInstance> {
 
       const defaultAttributes: RoutePointAttributes = {
@@ -77,31 +73,24 @@ export class Testbed {
       attributes = _.defaults(attributes || {}, defaultAttributes);
       Testbed.lastAttributes = attributes;
 
-      return RoutePoint.create(attributes).then((result: RoutePointInstance): RoutePointInstance => {
-         Testbed.routePoints.push(result);
-         return result;
-      });
+      const result: RoutePointInstance = await RoutePoint.create(attributes);
+      Testbed.routePoints.push(result);
+      return result;
    }
 
-   public static destroyAll(): Promise<void> {
-      const result: Promise<void> = Promise.all([
+   public static async destroyAll(): Promise<void> {
+      await Promise.all([
          Testbed.destroy(Testbed.edges),
          Testbed.destroy(Testbed.routes),
          Testbed.destroy(Testbed.stations),
-      ]).then((): void => { return; });
+      ]);
 
       Testbed.edges = [];
       Testbed.routes = [];
       Testbed.stations = [];
-
-      return result;
    }
 
-   private static destroy(instances: AnyInstance[]): Promise<void> {
-      const promises: Array<Promise<void>> = [];
-      for (const instance of instances) {
-         promises.push(instance.destroy());
-      }
-      return Promise.all(promises).then((): void => { return; });
+   private static destroy(instances: AnyInstance[]): Promise<void[]> {
+      return Promise.all(instances.map((instance: AnyInstance) => instance.destroy()));
    }
 }
