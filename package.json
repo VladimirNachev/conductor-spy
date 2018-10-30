@@ -39,11 +39,11 @@
   "homepage": "https://github.com/VladimirNachev/conductor-spy#readme",
   "devDependencies": {
     "@types/jasmine": "^2.8.4",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "istanbul": "^0.4.5",
     "jasmine": "^3.2.0",
     "pg": "^7.4.1",
-    "sequelize-cli": "^3.2.0",
+    "sequelize-cli": "^5.2.0",
     "tslint": "^5.9.1",
     "typescript": "^2.6.2"
   },
