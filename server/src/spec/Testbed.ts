@@ -78,16 +78,22 @@ export class Testbed {
       return result;
    }
 
-   public static async destroyAll(): Promise<void> {
+   public static async clear(): Promise<void> {
+      await Testbed.destroyAll(Edge);
+      await Testbed.destroyAll(RoutePoint);
       await Promise.all([
-         Testbed.destroy(Testbed.edges),
-         Testbed.destroy(Testbed.routes),
-         Testbed.destroy(Testbed.stations),
+         await Testbed.destroyAll(Route),
+         await Testbed.destroyAll(Station),
       ]);
 
       Testbed.edges = [];
       Testbed.routes = [];
       Testbed.stations = [];
+   }
+
+   private static async destroyAll(type: any): Promise<void> {
+      const instances: AnyInstance[] = await type.findAll();
+      await Testbed.destroy(instances);
    }
 
    private static destroy(instances: AnyInstance[]): Promise<void[]> {
