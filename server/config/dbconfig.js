@@ -16,6 +16,7 @@ const config = {
       "host": "localhost",
       "dialect": "postgres",
       "operatorsAliases": sequelize.Op,
+      "logging": false,
    },
    "production": {
       "username": "postgres",
@@ -24,7 +25,7 @@ const config = {
       "host": "127.0.0.1",
       "dialect": "postgres",
       "operatorsAliases": sequelize.Op,
-   }
+   },
 };
 
 module.exports = config;

@@ -3,6 +3,7 @@ process.env.NODE_ENV = "test";
 import { Testbed } from "../Testbed";
 
 beforeEach(async () => {
+   await Testbed.clear();
    await Promise.all([
       Testbed.createRoute(),
       Testbed.createStation(),
@@ -14,8 +15,4 @@ beforeEach(async () => {
       Testbed.createEdge(Testbed.stations[0], Testbed.stations[1]),
       Testbed.createRoutePoint(Testbed.routes[0], Testbed.stations[0]),
    ]);
-});
-
-afterEach((done: DoneFn): void => {
-   Testbed.destroyAll().then(done).catch(done);
 });

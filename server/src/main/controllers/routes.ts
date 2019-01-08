@@ -25,8 +25,10 @@ function extractParams(req: RouteRequest, res: Response): any {
 }
 
 router.get("/", extractParams, (req: RouteRequest, res: Response): any => {
+   Log.SERVER("11111----------------");
    return Route.findAll()
       .then((routes: RouteInstance[]): any => {
+         Log.SERVER("---------------- " + routes[0]);
          return res.status(200).send(routes);
       });
 });
