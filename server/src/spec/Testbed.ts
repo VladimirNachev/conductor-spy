@@ -79,8 +79,10 @@ export class Testbed {
    }
 
    public static async clear(): Promise<void> {
-      await Testbed.destroyAll(Edge);
-      await Testbed.destroyAll(RoutePoint);
+      await Promise.all([
+         await Testbed.destroyAll(Edge),
+         await Testbed.destroyAll(RoutePoint),
+      ]);
       await Promise.all([
          await Testbed.destroyAll(Route),
          await Testbed.destroyAll(Station),

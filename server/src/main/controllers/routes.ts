@@ -25,17 +25,19 @@ function extractParams(req: RouteRequest, res: Response): any {
 }
 
 router.get("/", extractParams, (req: RouteRequest, res: Response): any => {
-   Log.SERVER("11111----------------");
+   Log.SERVER("Fetching all routes...");
    return Route.findAll()
       .then((routes: RouteInstance[]): any => {
-         Log.SERVER("---------------- " + routes[0]);
+         Log.SERVER(`Fetched ${routes.length} route${routes.length === 1 ? "" : "s"}`);
          return res.status(200).send(routes);
       });
 });
 
 router.get("/:id", extractParams, (req: RouteRequest, res: Response): any => {
+   Log.SERVER(`Fetching route with ID ${req.newParams.id}`);
    return Route.findById(req.newParams.id)
       .then((route: RouteInstance | null): any => {
+         Log.SERVER(`Fetched route with ID ${req.newParams.id} successfully`);
          return res.status(200).send(route);
       });
 });
