@@ -1,22 +1,21 @@
 import { AnyInstance } from "../main/model";
 
+interface RawInstance { [attribute: string]: string; }
+
 export class SpecUtil {
 
-   public static verifyInstance(instance: AnyInstance, attributes: any): void {
-      expect(instance).toBeTruthy();
-      for (const key in attributes) {
-         expect(instance.get(key)).toBe(attributes[key]);
-      }
-   }
+   public static verifyInstance(instance: AnyInstance | RawInstance,
+      attributes: any): void {
 
-   public static verifyRawInstance(instance: { [attribute: string]: string }, attributes: any): void {
       expect(instance).toBeTruthy();
-      for (const key in attributes) {
-         expect(instance[key]).toBe(attributes[key]);
+      if (!!(instance as AnyInstance).get) {
+         for (const key in attributes) {
+            expect((instance as AnyInstance).get(key)).toBe(attributes[key]);
+         }
+      } else {
+         for (const key in attributes) {
+            expect((instance as RawInstance)[key]).toBe(attributes[key]);
+         }
       }
-   }
-
-   public static destroy(...instances: AnyInstance[]): Promise<void[]> {
-      return Promise.all(instances.map((instance: AnyInstance) => instance.destroy()));
    }
 }
