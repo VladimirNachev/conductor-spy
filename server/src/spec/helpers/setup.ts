@@ -16,3 +16,7 @@ beforeEach(async () => {
       Testbed.createRoutePoint(Testbed.routes[0], Testbed.stations[0]),
    ]);
 });
+
+afterAll(async () => {
+   await Testbed.clear();
+});

@@ -8,15 +8,22 @@ import { StationAttributes, StationInstance } from "../main/models/station";
 
 export class Testbed {
    public static routes: RouteInstance[] = [];
+   public static routeAttributes: RouteAttributes[] = [];
+
    public static edges: EdgeInstance[] = [];
+   public static edgeAttributes: EdgeAttributes[] = [];
+
    public static stations: StationInstance[] = [];
+   public static stationAttributes: StationAttributes[] = [];
+
    public static routePoints: RoutePointInstance[] = [];
+   public static routePointAttributes: RoutePointAttributes[] = [];
 
    public static lastAttributes: StandardAttributes;
 
    public static async createRoute(attributes?: RouteAttributes): Promise<RouteInstance> {
       const defaultAttributes: RouteAttributes = {
-         routeNumber: "44-Б",
+         routeNumber: `${Math.floor(Math.random() * 100)}-Б`,
          vehicleType: "bus",
       };
       attributes = _.defaults(attributes || {}, defaultAttributes);
@@ -24,6 +31,7 @@ export class Testbed {
 
       const result: RouteInstance = await Route.create(attributes);
       Testbed.routes.push(result);
+      Testbed.routeAttributes.push(attributes);
       return result;
    }
 
@@ -45,9 +53,10 @@ export class Testbed {
    }
 
    public static async createStation(attributes?: StationAttributes): Promise<StationInstance> {
+      const stationNumber: number = Math.floor(Math.random() * 1000000);
       const defaultAttributes: StationAttributes = {
-         name: "some-station",
-         stationNumber: "0" + Math.floor(Math.random() * 1000000).toString(),
+         name: "some-station-" + stationNumber,
+         stationNumber: "0" + stationNumber,
          latitude: 1.12,
          longtitude: 1.52,
          conductorAt: new Date().getTime().toString(),
@@ -61,14 +70,14 @@ export class Testbed {
       });
    }
 
-   public static async createRoutePoint(route: RouteInstance, station: StationInstance,
+   public static async createRoutePoint(route?: RouteInstance, station?: StationInstance,
       attributes?: RoutePointAttributes): Promise<RoutePointInstance> {
 
       const defaultAttributes: RoutePointAttributes = {
          index: 2,
          subrouteIndex: 12,
-         routeId: route.id,
-         stationId: station.id,
+         routeId: (route || Testbed.routes[0]).id,
+         stationId: (station || Testbed.stations[0]).id,
       };
       attributes = _.defaults(attributes || {}, defaultAttributes);
       Testbed.lastAttributes = attributes;
@@ -80,17 +89,22 @@ export class Testbed {
 
    public static async clear(): Promise<void> {
       await Promise.all([
-         await Testbed.destroyAll(Edge),
-         await Testbed.destroyAll(RoutePoint),
+         Testbed.destroyAll(Edge),
+         Testbed.destroyAll(RoutePoint),
       ]);
       await Promise.all([
-         await Testbed.destroyAll(Route),
-         await Testbed.destroyAll(Station),
+         Testbed.destroyAll(Route),
+         Testbed.destroyAll(Station),
       ]);
 
       Testbed.edges = [];
+      Testbed.edgeAttributes = [];
+      Testbed.routePoints = [];
+      Testbed.routePointAttributes = [];
       Testbed.routes = [];
+      Testbed.routeAttributes = [];
       Testbed.stations = [];
+      Testbed.stationAttributes = [];
    }
 
    private static async destroyAll(type: any): Promise<void> {
