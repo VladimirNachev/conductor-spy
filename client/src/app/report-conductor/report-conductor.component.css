@@ -60,3 +60,14 @@ mat-card {
    font-weight: bold;
 }
 
+.station {
+  border-style: inset outset outset inset;
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 493px) {
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}

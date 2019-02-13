@@ -20,3 +20,7 @@ h1 {
   width: 100%;
   /* display: block; */
 }
+
+h1 {
+  font-size: 1.75em;
+}

@@ -31,3 +31,10 @@
 mat-spinner {
   margin: 25px auto;
 }
+
+@media screen and (max-width: 398px) {
+  .top-selections {
+    display: flex;
+    flex-direction: column;
+  }
+}
