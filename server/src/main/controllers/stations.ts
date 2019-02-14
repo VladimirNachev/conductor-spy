@@ -180,15 +180,25 @@ router.get("/", extractParams, async (req: StationRequest, res: Response): Promi
 
 router.get("/:id", extractParams, async (req: StationRequest, res: Response): Promise<any> => {
    const station: StationInstance | null = await Station.findById(req.newParams.id);
+
+   if (!station) {
+     return res.sendStatus(404);
+   }
+
    return res.status(200).send(station);
 });
 
 router.put("/:id", extractParams, async (req: StationRequest, res: Response): Promise<any> => {
-   const station: [number, StationInstance[]] = await Station.update(
-      { conductorAt: new Date().getTime() },
-      { where: { id: req.newParams.id } },
-   );
-   return station[0] ? res.status(200).send(station) : res.sendStatus(404);
+  let station: StationInstance | null = await Station.findById(req.params.id);
+
+  if (!station) {
+    return res.sendStatus(404);
+  }
+
+  await Station.update(req.body, { where: { id: req.newParams.id }});
+
+  station = await Station.findById(req.params.id);
+  return res.status(200).send(station);
 });
 
 export default router;
