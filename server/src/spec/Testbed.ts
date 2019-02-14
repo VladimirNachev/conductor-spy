@@ -64,10 +64,11 @@ export class Testbed {
       attributes = _.defaults(attributes || {}, defaultAttributes);
       Testbed.lastAttributes = attributes;
 
-      return Station.create(attributes).then((result: StationInstance): StationInstance => {
-         Testbed.stations.push(result);
-         return result;
-      });
+      const result: StationInstance = await Station.create(attributes);
+      Testbed.stations.push(result);
+      Testbed.stationAttributes.push(attributes);
+
+      return result;
    }
 
    public static async createRoutePoint(route?: RouteInstance, station?: StationInstance,
