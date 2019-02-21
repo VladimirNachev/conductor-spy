@@ -8,7 +8,7 @@ import { Edge, Route, RoutePoint, Station } from "../models";
 import { EdgeInstance } from "../models/edge";
 import { RouteInstance } from "../models/route";
 import { RoutePointInstance } from "../models/route-point";
-import { StationInstance } from "../models/station";
+import { StationAttributes, StationInstance } from "../models/station";
 
 const router: any = require("express-promise-router")();
 
@@ -189,16 +189,16 @@ router.get("/:id", extractParams, async (req: StationRequest, res: Response): Pr
 });
 
 router.put("/:id", extractParams, async (req: StationRequest, res: Response): Promise<any> => {
-  let station: StationInstance | null = await Station.findById(req.params.id);
+  const updatedStationAttributes: StationAttributes = _.extend(req.body, { conductorAt: new Date().getTime() });
+  const updatedStationRaw: [number, StationInstance[]] =
+    await Station.update(updatedStationAttributes, { returning: true, where: { id: req.newParams.id }});
 
-  if (!station) {
+  if (updatedStationRaw[0] === 0) {
     return res.sendStatus(404);
   }
 
-  await Station.update(req.body, { where: { id: req.newParams.id }});
-
-  station = await Station.findById(req.params.id);
-  return res.status(200).send(station);
+  const updatedStation: StationInstance = updatedStationRaw[1][0];
+  return res.status(200).send(updatedStation);
 });
 
 export default router;

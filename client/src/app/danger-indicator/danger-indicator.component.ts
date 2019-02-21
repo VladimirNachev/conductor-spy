@@ -83,7 +83,7 @@ export class DangerIndicatorComponent implements OnInit {
 
    ngOnInit() {
       this.calculateChances();
-      this.chance = this.chances[DangerIndicatorComponent.TIMELINE_NOW_INDEX] * 100;
+      this.chance = Number((this.chances[DangerIndicatorComponent.TIMELINE_NOW_INDEX] * 100).toFixed(2));
    }
 
 }
