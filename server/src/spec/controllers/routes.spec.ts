@@ -124,6 +124,9 @@ describe("The Route controller", () => {
          { arrivalChance: 0.1, arrivalTime: now - 150 + 25000 },
          { arrivalChance: 0.2, arrivalTime: now - 15050 + 1000 },
          { arrivalChance: 0.3, arrivalTime: now - 100 + 1000 },
+         // When a conductor with police is reported, they may remain
+         // at the same station instead of always going to the next one
+         { arrivalChance: 1.0, arrivalTime: now - 100 },
       ];
       const station3ArrivalInfo: ConductorArrival[] = [
          { arrivalChance: 0.25, arrivalTime: now - 100 + 2500 },
