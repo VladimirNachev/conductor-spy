@@ -74,6 +74,16 @@ export class ConductorUtil {
          stationsWithInfo[stationId] = _.extend(stationMap[stationId], {
             arrivals: arrivalInfo[stationId] || [],
          });
+         stationsWithInfo[stationId].arrivals.push();
+      }
+
+      for (const station of allStations) {
+         if (currentTime - Number(station.conductorWithPoliceAt) <= timeDeltaLimitMs) {
+            arrivalInfo[station.id].push({
+               arrivalChance: 1.0,
+               arrivalTime: Number(station.conductorWithPoliceAt),
+            });
+        }
       }
       return stationsWithInfo;
    }
