@@ -60,6 +60,7 @@ export class Testbed {
          latitude: 1.12,
          longtitude: 1.52,
          conductorAt: new Date().getTime().toString(),
+         conductorWithPoliceAt: "0",
       };
       attributes = _.defaults(attributes || {}, defaultAttributes);
       Testbed.lastAttributes = attributes;

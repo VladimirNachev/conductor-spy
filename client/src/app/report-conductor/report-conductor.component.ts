@@ -38,9 +38,9 @@ export class ReportConductorComponent implements OnInit {
          });
    }
 
-   private reportConductor(station: ExtendendStation): void {
+   private reportConductor(station: ExtendendStation, conductorWithPolice: boolean): void {
       station.marked = true;
-      this.stationsService.reportConductor(station)
+      this.stationsService.reportConductor(station, conductorWithPolice)
          .subscribe((station: Station): any => {
 
          }, (error: any): void => {

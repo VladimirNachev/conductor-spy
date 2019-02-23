@@ -40,13 +40,21 @@ mat-spinner {
   min-width: 240px;
 }
 
+.report-buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
 .report-button div {
-  line-height: 22px;
+  line-height: 18px;
 }
 
 .report-button {
   padding: 5px 0;
   max-height: 64px;
+  margin-top: 10px;
+  min-height: 3em;
 }
 
 mat-card {
@@ -65,7 +73,7 @@ mat-card {
   margin-top: 10px;
 }
 
-@media screen and (max-width: 493px) {
+@media screen and (max-width: 585px) {
   .content-wrapper {
     display: flex;
     flex-direction: column;

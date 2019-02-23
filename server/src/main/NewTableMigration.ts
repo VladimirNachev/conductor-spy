@@ -24,11 +24,11 @@ export class NewTableMigration {
       const attributes: DefineAttributes = this.attributeInitializer(sequelize);
 
       attributes.id = {
-         allowNull: false,
+         // allowNull: false,
          autoIncrement: true,
          defaultValue: (): number => Math.floor(Math.random() * 10000),
          primaryKey: true,
-         type: sequelize.INTEGER,
+         type: sequelize.BIGINT,
       };
 
       attributes.createdAt = {

@@ -21,7 +21,8 @@ export = new PopulateTableSeeder<StationAttributes>("Stations", (): Promise<Stat
          stationNumber: info.c,
          longtitude: info.x,
          latitude: info.y,
-         conductorAt: 0,
+         conductorAt: "0",
+         conductorWithPoliceAt: "0",
       };
    }));
 });

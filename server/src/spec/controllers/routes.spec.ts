@@ -1,6 +1,7 @@
 import * as request from "supertest";
 import app from "../../main/app";
 import { ConductorArrival } from "../../main/conductor.util";
+import { Log } from "../../main/Log";
 import { RouteInstance } from "../../main/models/route";
 import { RoutePointInstance } from "../../main/models/route-point";
 import { StationInstance } from "../../main/models/station";
@@ -8,7 +9,7 @@ import { SpecUtil } from "../SpecUtil";
 import { Testbed } from "../Testbed";
 
 interface StationArrivalInfo {
-   id: number;
+   id: string;
    index: number;
    subrouteIndex: number;
    stationName: string;
@@ -53,11 +54,12 @@ describe("The Route controller", () => {
       await Testbed.clear();
       const now: number = new Date().getTime();
       const stations: StationInstance[] = await Promise.all([
-         Testbed.createStation({ name: "station0", conductorAt: now - 150 }),
-         Testbed.createStation({ name: "station1", conductorAt: now - 15050 }),
-         Testbed.createStation({ name: "station2", conductorAt: 0 }),
-         Testbed.createStation({ name: "station3", conductorAt: now - 140 }),
-         Testbed.createStation({ name: "station4", conductorAt: now - 0 }),
+         Testbed.createStation({ name: "station0", conductorAt: (now - 150).toString() }),
+         Testbed.createStation({ name: "station1", conductorAt: (now - 15050).toString() }),
+         Testbed.createStation({ name: "station2", conductorAt: (now - 120).toString(),
+            conductorWithPoliceAt: (now - 100).toString() }),
+         Testbed.createStation({ name: "station3", conductorAt: (now - 140).toString() }),
+         Testbed.createStation({ name: "station4", conductorAt: (now - 0).toString() }),
       ]);
 
       const route: RouteInstance = await Testbed.createRoute();
@@ -82,9 +84,17 @@ describe("The Route controller", () => {
             chance: 0.2,
             travelTimeMs: 1000,
          }),
+         Testbed.createEdge(stations[2], stations[2], {
+            chance: 0.3,
+            travelTimeMs: 1000,
+         }),
          // To station3
          Testbed.createEdge(stations[0], stations[3], {
             chance: 0.3,
+            travelTimeMs: 2500,
+         }),
+         Testbed.createEdge(stations[2], stations[3], {
+            chance: 0.25,
             travelTimeMs: 2500,
          }),
          // To station4
@@ -96,16 +106,16 @@ describe("The Route controller", () => {
             chance: 0.6,
             travelTimeMs: 1000000,
          }),
-         // station2 hasn't had a conductor for a long time so its edges don't do anything
-         Testbed.createEdge(stations[2], stations[2], { chance: 1.0 }),
-         Testbed.createEdge(stations[2], stations[3], { chance: 1.0 }),
-         Testbed.createEdge(stations[2], stations[4], { chance: 1.0 }),
+         Testbed.createEdge(stations[2], stations[4], {
+            chance: 0.3,
+            travelTimeMs: 2500,
+         }),
       ]);
 
       const rawResult: any = await request(app)
          .get(`/api/routes/${route.id}/points`)
          .expect(200);
-      const result: StationArrivalInfo[] = JSON.parse(rawResult.text);
+      const result: StationArrivalInfo[] = rawResult.body;
       for (const arrivalInfo of result) {
          arrivalInfo.arrivals.sort((a: ConductorArrival, b: ConductorArrival) =>
             a.arrivalChance - b.arrivalChance);
@@ -113,11 +123,14 @@ describe("The Route controller", () => {
       const station2ArrivalInfo: ConductorArrival[] = [
          { arrivalChance: 0.1, arrivalTime: now - 150 + 25000 },
          { arrivalChance: 0.2, arrivalTime: now - 15050 + 1000 },
+         { arrivalChance: 0.3, arrivalTime: now - 100 + 1000 },
       ];
       const station3ArrivalInfo: ConductorArrival[] = [
+         { arrivalChance: 0.25, arrivalTime: now - 100 + 2500 },
          { arrivalChance: 0.3, arrivalTime: now - 150 + 2500 },
       ];
       const station4ArrivalInfo: ConductorArrival[] = [
+         { arrivalChance: 0.3, arrivalTime: now - 100 + 2500 },
          { arrivalChance: 0.5, arrivalTime: now - 15050 + 10 },
          { arrivalChance: 0.6, arrivalTime: now - 140 + 1000000 },
       ];

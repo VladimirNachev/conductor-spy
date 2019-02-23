@@ -17,10 +17,16 @@
             </mat-card-content>
          </div>
 
-         <button [disabled]="station.marked" class="report-button" mat-raised-button color="primary" (click)="reportConductor(station)">
-            <div>Отбележи</div>
-            <div>контрола</div>
-         </button>
+         <div class="report-buttons-wrapper">
+           <button [disabled]="station.marked" class="report-button" mat-raised-button color="primary" (click)="reportConductor(station, false)">
+              <div>Отбележи контрола</div>
+           </button>
+
+           <button [disabled]="station.marked" class="report-button" mat-raised-button color="primary" (click)="reportConductor(station, true)">
+              <div>Отбележи контрола</div>
+              <div>в присъствието на полиция</div>
+           </button>
+         </div>
       </div>
    </mat-card>
    <mat-card *ngIf="!!stations.length" class="note">Показаните спирки са най-близките до Вас.</mat-card>

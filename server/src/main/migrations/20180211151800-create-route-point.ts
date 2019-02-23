@@ -18,7 +18,7 @@ export = new NewTableMigration("RoutePoints", (types: DataTypes): DefineAttribut
          model: "Routes",
          key: "id",
       },
-      type: types.INTEGER,
+      type: types.BIGINT,
    },
 
    stationId: {
@@ -27,6 +27,6 @@ export = new NewTableMigration("RoutePoints", (types: DataTypes): DefineAttribut
          model: "Stations",
          key: "id",
       },
-      type: types.INTEGER,
+      type: types.BIGINT,
    },
 }));
