@@ -20,7 +20,7 @@ export class StationsService {
     });
   }
 
-  reportConductor(station: Station): Observable<Station> {
-    return this.httpClient.put<Station>(`/api/stations/${station.id}`, {});
+  reportConductor(station: Station, conductorWithPolice: boolean): Observable<Station> {
+    return this.httpClient.put<Station>(`/api/stations/${station.id}`, { conductorWithPolice: conductorWithPolice });
   }
 }

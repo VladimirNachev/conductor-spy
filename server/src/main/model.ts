@@ -37,7 +37,7 @@ export interface StandardInstance<TAttributes extends StandardAttributes> extend
    Instance<TAttributes> {
 
    /** The ID of the instance */
-   id: number;
+   id: string;
    /** When the instance was created */
    createdAt: Date;
    /** When the instance was last updated */

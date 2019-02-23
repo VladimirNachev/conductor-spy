@@ -7,7 +7,8 @@ export interface StationAttributes extends StandardAttributes {
    stationNumber?: string;
    latitude?: number;
    longtitude?: number;
-   conductorAt?: string | number;
+   conductorAt?: string;
+   conductorWithPoliceAt?: string;
 }
 
 export interface StationInstance extends StandardInstance<StationAttributes> {
@@ -16,6 +17,7 @@ export interface StationInstance extends StandardInstance<StationAttributes> {
    latitude: number;
    longtitude: number;
    conductorAt: string;
+   conductorWithPoliceAt: string;
 }
 
 export type StationModel = sequelize.Model<StationInstance, StationAttributes>;
@@ -45,7 +47,12 @@ export default function (database: Sequelize, types: DataTypes): StationModel {
 
       conductorAt: {
          allowNull: false,
-         type: types.INTEGER,
+         type: types.BIGINT,
+      },
+
+      conductorWithPoliceAt: {
+         allowNull: false,
+         type: types.BIGINT,
       },
    });
 

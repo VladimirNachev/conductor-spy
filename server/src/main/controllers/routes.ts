@@ -49,10 +49,10 @@ router.get("/:id/points", extractParams, async (req: RouteRequest, res: Response
       ],
    });
 
-   const stationIds: number[] = routePoints
-      .map((routePoint: RoutePointInstance): number => routePoint.stationId);
+   const stationIds: string[] = routePoints
+      .map((routePoint: RoutePointInstance): string => routePoint.stationId);
 
-   const stationsWithArrivalInfo: { [id: number]: StationWithArrivalInfo } =
+   const stationsWithArrivalInfo: { [id: string]: StationWithArrivalInfo } =
       await ConductorUtil.getConductorArrivalInfo(stationIds);
 
    const result: any[] = routePoints.map((routePoint: RoutePointInstance): any =>

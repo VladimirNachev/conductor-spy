@@ -24,14 +24,14 @@ function getWalkCoefficient(distanceInMeters: number): number {
 }
 
 interface DefinedEdgeAttributes extends EdgeAttributes {
-   fromStationId: number;
-   toStationId: number;
+   fromStationId: string;
+   toStationId: string;
    chance: number;
    travelTimeMs: number;
 }
 
 function mergeEdges(edges: DefinedEdgeAttributes[]): DefinedEdgeAttributes[] {
-   const newEdges: { [targetId: number]: DefinedEdgeAttributes } = {};
+   const newEdges: { [targetId: string]: DefinedEdgeAttributes } = {};
    for (const edge of edges) {
       if (newEdges[edge.toStationId]) {
          newEdges[edge.toStationId].chance = newEdges[edge.toStationId].chance + edge.chance;
@@ -63,9 +63,9 @@ export = new PopulateTableSeeder<EdgeAttributes>("Edges", async (): Promise<Edge
       await Promise.all([Station.findAll(), RoutePoint.findAll()]);
 
    let attributes: DefinedEdgeAttributes[] = [];
-   const stationMap: { [id: number]: StationInstance } = {};
-   const originalEdges: { [id: number]: DefinedEdgeAttributes[] } = {};
-   const additionalEdges: { [id: number]: DefinedEdgeAttributes[] } = {};
+   const stationMap: { [id: string]: StationInstance } = {};
+   const originalEdges: { [id: string]: DefinedEdgeAttributes[] } = {};
+   const additionalEdges: { [id: string]: DefinedEdgeAttributes[] } = {};
 
    for (const station of result[0]) {
       stationMap[station.id] = station;
@@ -76,7 +76,7 @@ export = new PopulateTableSeeder<EdgeAttributes>("Edges", async (): Promise<Edge
    const routePoints: RoutePointInstance[] = result[1];
    routePoints.sort((routePoint1: RoutePointInstance, routePoint2: RoutePointInstance): number => {
       if (routePoint1.routeId !== routePoint2.routeId) {
-         return routePoint1.routeId - routePoint2.routeId;
+         return Number(routePoint1.routeId) - Number(routePoint2.routeId);
       }
       if (routePoint1.subrouteIndex !== routePoint2.subrouteIndex) {
          return routePoint1.subrouteIndex - routePoint2.subrouteIndex;

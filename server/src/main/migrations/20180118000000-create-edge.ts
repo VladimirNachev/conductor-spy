@@ -12,7 +12,7 @@ export = new NewTableMigration("Edges", (types: DataTypes): DefineAttributes => 
          model: "Stations",
          key: "id",
       },
-      type: types.INTEGER,
+      type: types.BIGINT,
    },
    toStationId: {
       allowNull: false,
@@ -20,7 +20,7 @@ export = new NewTableMigration("Edges", (types: DataTypes): DefineAttributes => 
          model: "Stations",
          key: "id",
       },
-      type: types.INTEGER,
+      type: types.BIGINT,
    },
    travelTimeMs: {
       allowNull: false,

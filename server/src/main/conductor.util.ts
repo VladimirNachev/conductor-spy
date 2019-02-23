@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as sequelize from "sequelize";
+import { Log } from "./Log";
 import { Edge, Station } from "./models";
 import { EdgeInstance } from "./models/edge";
 import { StationInstance } from "./models/station";
@@ -15,20 +16,20 @@ export interface StationWithArrivalInfo extends StationInstance {
 
 export class ConductorUtil {
 
-   public static async getConductorArrivalInfo(stations: { id: number }[] | number[]):
-      Promise<{ [id: number]: StationWithArrivalInfo }> {
+   public static async getConductorArrivalInfo(stations: { id: string }[] | string[]):
+      Promise<{ [id: string]: StationWithArrivalInfo }> {
 
-      const stationIds: number[] = [];
+      const stationIds: string[] = [];
       for (const station of stations) {
-         stationIds.push(typeof station === "number"
+         stationIds.push(typeof station === "string"
             ? station
             : station.id);
       }
 
-      const arrivalInfo: { [stationId: number]: ConductorArrival[] } = {};
-      const stationMap: { [id: number]: StationInstance } = {};
+      const arrivalInfo: { [stationId: string]: ConductorArrival[] } = {};
+      const stationMap: { [id: string]: StationInstance } = {};
 
-      const sourceStationMap: { [id: number]: StationInstance } = {};
+      const sourceStationMap: { [id: string]: StationInstance } = {};
 
       const stationsAndEdges: [StationInstance[], EdgeInstance[]] = await Promise.all([
          Station.findAll({ where: { id: { [sequelize.Op.in]: stationIds } } }),
@@ -40,8 +41,8 @@ export class ConductorUtil {
       for (const station of allStations) {
          stationMap[station.id] = station;
       }
-      const ids: number[] = _.uniq(
-         allEdges.map((edge: EdgeInstance): number => edge.fromStationId));
+      const ids: string[] = _.uniq(
+         allEdges.map((edge: EdgeInstance): string => edge.fromStationId));
 
       const result: StationInstance[] = await Station.findAll({ where: { id: { [sequelize.Op.in]: ids } } });
 
@@ -54,20 +55,21 @@ export class ConductorUtil {
       // const timeDeltaLimitMs: number = Infinity;
       const currentTime: number = new Date().getTime();
       for (const edge of allEdges) {
-         const conductorAt: number =
-            parseInt(sourceStationMap[edge.fromStationId].conductorAt, 10) +
-            edge.travelTimeMs;
-         if (currentTime - conductorAt > timeDeltaLimitMs) {
-            continue;
-         }
-         arrivalInfo[edge.toStationId] = arrivalInfo[edge.toStationId] || [];
-         arrivalInfo[edge.toStationId].push({
-            arrivalChance: edge.chance,
-            arrivalTime: conductorAt,
-         });
+        const conductorAt: number = Number(sourceStationMap[edge.fromStationId].conductorAt);
+        const conductorWithPoliceAt: number = Number(sourceStationMap[edge.fromStationId].conductorWithPoliceAt);
+        const conductorAtNextStop: number = Math.max(conductorAt, conductorWithPoliceAt) + edge.travelTimeMs;
+
+        if (currentTime - conductorAtNextStop > timeDeltaLimitMs) {
+          continue;
+        }
+        arrivalInfo[edge.toStationId] = arrivalInfo[edge.toStationId] || [];
+        arrivalInfo[edge.toStationId].push({
+          arrivalChance: edge.chance,
+          arrivalTime: conductorAtNextStop,
+        });
       }
 
-      const stationsWithInfo: { [id: number]: StationWithArrivalInfo } = {};
+      const stationsWithInfo: { [id: string]: StationWithArrivalInfo } = {};
       for (const stationId in stationMap) {
          stationsWithInfo[stationId] = _.extend(stationMap[stationId], {
             arrivals: arrivalInfo[stationId] || [],

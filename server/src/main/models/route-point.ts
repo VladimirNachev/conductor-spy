@@ -5,15 +5,15 @@ import { ModelContainer, StandardAttributes, StandardInstance } from "../model";
 export interface RoutePointAttributes extends StandardAttributes {
    index?: number;
    subrouteIndex?: number;
-   routeId?: number;
-   stationId?: number;
+   routeId?: string;
+   stationId?: string;
 }
 
 export interface RoutePointInstance extends StandardInstance<RoutePointAttributes> {
    index: number;
    subrouteIndex: number;
-   routeId: number;
-   stationId: number;
+   routeId: string;
+   stationId: string;
 
    getRoute(): any;
    getStation(): any;

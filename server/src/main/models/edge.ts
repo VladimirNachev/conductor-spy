@@ -4,9 +4,9 @@ import { ModelContainer, StandardAttributes, StandardInstance } from "../model";
 
 export interface EdgeAttributes extends StandardAttributes {
    /** Station A */
-   fromStationId?: number;
+   fromStationId?: string;
    /** Station B */
-   toStationId?: number;
+   toStationId?: string;
    /** The chance that a conductor moves from station A to station B, from 0.0 to 1.0 */
    chance?: number;
    /** The milliseconds it takes a conductor to move from station A to station B */
@@ -15,9 +15,9 @@ export interface EdgeAttributes extends StandardAttributes {
 
 export interface EdgeInstance extends StandardInstance<EdgeAttributes> {
    /** Station A */
-   fromStationId: number;
+   fromStationId: string;
    /** Station B */
-   toStationId: number;
+   toStationId: string;
    /** The chance that a conductor moves from station A to station B, from 0.0 to 1.0 */
    chance: number;
    /** The milliseconds it takes a conductor to move from station A to station B */

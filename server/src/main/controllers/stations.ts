@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import * as _ from "lodash";
 import * as sequelize from "sequelize";
 import { ConductorArrival, ConductorUtil, StationWithArrivalInfo } from "../conductor.util";
-import { Log } from "../Log";
 import { GeoLocation, MathUtil } from "../math.util";
 import { Edge, Route, RoutePoint, Station } from "../models";
 import { EdgeInstance } from "../models/edge";
@@ -35,10 +34,10 @@ function extractParams(req: StationRequest, res: Response): Promise<string> {
 }
 
 interface RouteInfo {
-   firstStationId: number;
+   firstStationId: string;
    firstStationName: string;
 
-   lastStationId: number;
+   lastStationId: string;
    lastStationName: string;
 
    routeNumber: string;
@@ -46,7 +45,7 @@ interface RouteInfo {
 }
 
 interface StationResponse {
-   id: number;
+   id: string;
    name: string;
    distance: number;
    arrivals: ConductorArrival[];
@@ -67,7 +66,7 @@ router.get("/", extractParams, async (req: StationRequest, res: Response): Promi
 
    let responses: StationResponse[] = [];
 
-   type BulkResult1 = [{ [id: number]: StationWithArrivalInfo }, RoutePointInstance[]];
+   type BulkResult1 = [{ [id: string]: StationWithArrivalInfo }, RoutePointInstance[]];
 
    const allStations: StationInstance[] = await Station.findAll();
    for (const station of allStations) {
@@ -83,8 +82,8 @@ router.get("/", extractParams, async (req: StationRequest, res: Response): Promi
       station.distance < maxDistance);
    responses.sort((s1: any, s2: any): number => s1.distance - s2.distance);
 
-   const stationIds: number[] = responses
-      .map((station: StationResponse): number => station.id);
+   const stationIds: string[] = responses
+      .map((station: StationResponse): string => station.id);
 
    const bulkResult1: BulkResult1 = await Promise.all([
       ConductorUtil.getConductorArrivalInfo(responses),
@@ -94,8 +93,8 @@ router.get("/", extractParams, async (req: StationRequest, res: Response): Promi
    for (const station of responses) {
       station.arrivals = bulkResult1[0][station.id].arrivals;
    }
-   const routeIds: number[] = _.uniq(bulkResult1[1]
-      .map((routePoint: RoutePointInstance): number => routePoint.routeId));
+   const routeIds: string[] = _.uniq(bulkResult1[1]
+      .map((routePoint: RoutePointInstance): string => routePoint.routeId));
 
    type BulkResult2 = [RoutePointInstance[], RouteInstance[]];
 
@@ -106,12 +105,12 @@ router.get("/", extractParams, async (req: StationRequest, res: Response): Promi
 
    const routePoints: RoutePointInstance[] = bulkResult2[0];
 
-   const routeMap: { [id: number]: RouteInstance } = {};
+   const routeMap: { [id: string]: RouteInstance } = {};
    for (const route of bulkResult2[1]) {
       routeMap[route.id] = route;
    }
 
-   const routePointMap: { [stationId: number]: RoutePointInstance[] } = {};
+   const routePointMap: { [stationId: string]: RoutePointInstance[] } = {};
    for (const routePoint of routePoints) {
       routePointMap[routePoint.stationId] = routePointMap[routePoint.stationId] || [];
       routePointMap[routePoint.stationId].push(routePoint);
@@ -119,19 +118,19 @@ router.get("/", extractParams, async (req: StationRequest, res: Response): Promi
 
    routePoints.sort((rp1: RoutePointInstance, rp2: RoutePointInstance): number => {
       if (rp1.routeId !== rp2.routeId) {
-         return rp1.routeId - rp2.routeId;
+         return Number(rp1.routeId) - Number(rp2.routeId);
       }
       if (rp1.subrouteIndex !== rp2.subrouteIndex) {
          return rp1.subrouteIndex - rp2.subrouteIndex;
       }
       return rp1.index - rp2.index;
    });
-   const routePointIndices: { [id: number]: number } = {};
+   const routePointIndices: { [id: string]: number } = {};
    for (let i: number = 0; i < routePoints.length; i++) {
       routePointIndices[routePoints[i].id] = i;
    }
 
-   const stationsToGetNamesOf: number[] = [];
+   const stationsToGetNamesOf: string[] = [];
 
    for (const station of responses) {
       const stationRoutePoints: RoutePointInstance[] = routePointMap[station.id] || [];
@@ -164,7 +163,7 @@ router.get("/", extractParams, async (req: StationRequest, res: Response): Promi
       where: { id: { [sequelize.Op.in]: _.uniq(stationsToGetNamesOf) } },
    });
 
-   const stationMap: { [id: number]: StationInstance } = {};
+   const stationMap: { [id: string]: StationInstance } = {};
    for (const station of result) {
       stationMap[station.id] = station;
    }
@@ -189,7 +188,16 @@ router.get("/:id", extractParams, async (req: StationRequest, res: Response): Pr
 });
 
 router.put("/:id", extractParams, async (req: StationRequest, res: Response): Promise<any> => {
-  const updatedStationAttributes: StationAttributes = _.extend(req.body, { conductorAt: new Date().getTime() });
+  const updatedStationAttributes: StationAttributes = req.body;
+
+  if (req.body.conductorWithPolice) {
+    updatedStationAttributes.conductorWithPoliceAt = new Date().getTime().toString();
+  }
+
+  else {
+    updatedStationAttributes.conductorAt = new Date().getTime().toString();
+  }
+
   const updatedStationRaw: [number, StationInstance[]] =
     await Station.update(updatedStationAttributes, { returning: true, where: { id: req.newParams.id }});
 
