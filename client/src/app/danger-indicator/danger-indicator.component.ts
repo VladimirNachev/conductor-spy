@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Input } from '@angular/core';
 import { ConductorArrival } from '../model/conductor-info';
 
@@ -7,11 +7,11 @@ import { ConductorArrival } from '../model/conductor-info';
    templateUrl: './danger-indicator.component.html',
    styleUrls: ['./danger-indicator.component.css']
 })
-export class DangerIndicatorComponent implements OnInit {
+export class DangerIndicatorComponent implements OnInit, OnDestroy {
    @Input() arrivals: ConductorArrival[];
 
-   private static readonly RESOLUTION: number = 50;
-   private static readonly BLUR_SIZE: number = 1;
+   private static readonly RESOLUTION: number = 300;
+   private static readonly BLUR_SIZE: number = 6;
    private static readonly BLUR_PASSES: number = 3;
    private static readonly STAY_PER_MINUTE_CHANCE: number = 0.7;
 
@@ -22,9 +22,12 @@ export class DangerIndicatorComponent implements OnInit {
          (-DangerIndicatorComponent.TIMELINE_OFFSET_MS / DangerIndicatorComponent.TIMELINE_LENGTH_MS)),
       0
    );
+   private static readonly STEP_SIZE_MS: number =
+      DangerIndicatorComponent.TIMELINE_LENGTH_MS / DangerIndicatorComponent.RESOLUTION;
 
    chance: number = 0.0;
    private chances: number[];
+   private refreshInterval: any;
 
    constructor() {
    }
@@ -33,13 +36,12 @@ export class DangerIndicatorComponent implements OnInit {
       const now: number = new Date().getTime();
       const timelineBegin: number = now + DangerIndicatorComponent.TIMELINE_OFFSET_MS;
       const timelineEnd: number = timelineBegin + DangerIndicatorComponent.TIMELINE_LENGTH_MS;
-      const step: number = DangerIndicatorComponent.TIMELINE_LENGTH_MS / DangerIndicatorComponent.RESOLUTION;
       let time: number = timelineBegin;
 
       this.chances = [];
       for (let i: number = 0; i < DangerIndicatorComponent.RESOLUTION; i++) {
          this.chances.push(this.getChance(time));
-         time += step;
+         time += DangerIndicatorComponent.STEP_SIZE_MS;
       }
 
       this.chances = DangerIndicatorComponent.blur(this.chances,
@@ -59,6 +61,7 @@ export class DangerIndicatorComponent implements OnInit {
       return 1.0 - noConductorChance;
    }
 
+   // tslint:disable-next-line:member-ordering
    private static blur(array: number[], passes?: number): number[] {
       if (typeof passes === "undefined") {
          passes = 1;
@@ -81,9 +84,30 @@ export class DangerIndicatorComponent implements OnInit {
       return DangerIndicatorComponent.blur(result, passes - 1);
    }
 
+
+
    ngOnInit() {
       this.calculateChances();
-      this.chance = Number((this.chances[DangerIndicatorComponent.TIMELINE_NOW_INDEX] * 100).toFixed(2));
+      let index: number = DangerIndicatorComponent.TIMELINE_NOW_INDEX;
+      this.chance = Number((this.chances[index] * 100).toFixed(2));
+
+      console.log("Calling setInterval");
+      this.refreshInterval = setInterval(() => {
+         console.log("In setInterval");
+         index++;
+
+         if (index >= this.chances.length) {
+            clearInterval(this.refreshInterval);
+            this.refreshInterval = undefined;
+         } else {
+            this.chance = Number((this.chances[index] * 100).toFixed(2));
+         }
+      }, DangerIndicatorComponent.STEP_SIZE_MS);
    }
 
+   ngOnDestroy() {
+      if (this.refreshInterval) {
+         clearInterval(this.refreshInterval);
+      }
+   }
 }
